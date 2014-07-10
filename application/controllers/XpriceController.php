@@ -98,10 +98,10 @@ class XpriceController extends Zend_Controller_Action {
                     . "WHERE OOLINE.OBORNO='{$numwp}' "
                     . "GROUP BY OOLINE.OBORNO;";
                     $numwp_user= odbc_fetch_array(odbc_exec($this->odbc_conn,$query1));
-                    echo var_dump($numwp_user);
+                    //echo var_dump($numwp_user);
                     $usertest = new Application_Model_DbTable_Users();
                     $user_info = $usertest->getMovexUser($numwp_user['userwp']);
-                    echo '<pre>',  var_export($user_info, false),'</pre>';
+                    //echo '<pre>',  var_export($user_info, false),'</pre>';
                     $this->view->user_info=$user_info;
 //                    $nom_user1 = $user_info['nom_user'];
 //                    $prenom_user1 = $user_info['prenom_user'];
@@ -170,11 +170,21 @@ class XpriceController extends Zend_Controller_Action {
               // foreach($resultats as $result){
               
         while ( $resultat[]=odbc_fetch_array($resultats)){
-            //echo '<pre>', var_export($resultat,false),'</pre>';
+           // echo '<pre>', var_export($resultat[1],false),'</pre>';
         $this->view->resultat=$resultat;
+        //var_dump($resultat[0]['OBCUNO']);
+       
         }
-         
-        
+          $query1bis="select * "
+                . "from OCUSMA "
+                . "where OCUSMA.OKCUNO = '{$resultat[0]['OBCUNO']}'";
+        //var_dump($query1bis);
+        $infos_client = odbc_fetch_array(odbc_exec($this->odbc_conn, $query1bis));
+        $this->view->infos_client=$infos_client;
+        //var_dump($infos_client['OKCUCL']);
+        //$industry = new Application_Model_DbTable_Industry();
+        //$info_industry = $industry->getMovexIndustry($infos_client['OKCUCL']);
+        //echo '<pre>',  var_export($info_industry, false),'</pre>';
         }
 
         // franck là :
