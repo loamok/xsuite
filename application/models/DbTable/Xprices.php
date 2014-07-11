@@ -4,28 +4,32 @@ class Application_Model_DbTable_Xprices extends Zend_Db_Table_Abstract {
 
     protected $_name = 'demande_xprices';
 
-    public function createXprice($num_workplace_demande_xprice, $tracking_number_demande_xprice, $commentaire_demande_xprice, $date_demande_xprice, $id_user, $id_validation=null) {
+    public function createXprice($num_workplace_demande_xprice, $tracking_number_demande_xprice, $commentaire_demande_xprice, $date_demande_xprice,$justificatif_demande_xprice, $id_user, $id_validation=null,$id_client) {
         $data = array(
             'num_workplace_demande_xprice' => $num_workplace_demande_xprice,
             'tracking_number_demande_xprice' => $tracking_number_demande_xprice,
             'commentaire_demande_xprice' => $commentaire_demande_xprice,
             'date_demande_xprice' => $date_demande_xprice,
+            'justificatif_demande_xprice'=>$justificatif_demande_xprice,
             'id_user' => $id_user,
-            'id_validation' => $id_validation
+            'id_validation' => $id_validation,
+            'id_client'=>$id_client
         );
         $this->insert($data);
         return $this;
     }
 
-    public function updateXprice($id_demande_xprice, $num_workplace_demande_xprice, $tracking_number_demande_xprice, $commentaire_demande_xprice, $date_demande_xprice, $id_user, $id_validation=null) {
+    public function updateXprice($id_demande_xprice, $num_workplace_demande_xprice, $tracking_number_demande_xprice, $commentaire_demande_xprice, $date_demande_xprice,$justificatif_demande_xprice, $id_user, $id_validation=null,$id_client) {
 
         $data = array(
             'num_workplace_demande_xprice' => $num_workplace_demande_xprice,
             'tracking_number_demande_xprice' => $tracking_number_demande_xprice,
             'commentaire_demande_xprice' => $commentaire_demande_xprice,
             'date_demande_xprice' => $date_demande_xprice,
+            'justificatif_demande_xprice'=>$justificatif_demande_xprice,
             'id_user' => $id_user,
-            'id_validation' => $id_validation
+            'id_validation' => $id_validation,
+            'id_client'=>$id_client
         );
         $this->update($data, 'id_demande_xprice=' . (int) $id_demande_xprice);
         return $this;

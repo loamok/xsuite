@@ -38,37 +38,11 @@ class XpriceController extends Zend_Controller_Action {
                     $flashMessenger->addMessage($message);
                     $form->populate($this->getRequest()->getPost());
                 }
-                /* on vérifie que le numéro existe bien dans la base movex
-                 * $dsn="DRIVER=Client Acess ODBC Driver(32-bit);UID=EU65535;PWD=CCS65535;SYSTEM=10.105.80.32;DBQ=CVXCDTA";
-                 * $mmcono = "100";
-                 * $division = "FR0;
-                 * $facility = "I01";
-                 * $type = "3";
-                 * $warehouse = "I02";
-                 * $supplier = "I990001";
-                 * $agreement1 = "I000001";
-                 * $agreement2 = "I000002";
-                 * $agreement3 = "I000003";
-                 *
-                 * $conn = odbc_connect($dsn,"","");
-                 * if(!$conn2){
-                 * echo "pas d'accès à la base de données";
-                 * }
-                 * $query = "select COUNT(*) FROM EIT.CVXCDTA.OOLINE OOLINE WHERE OOLINE.OBORNO ='$_POST['num_offre_workplace']' AND OOLINE.OBDIVI='FR0' and OOLINE.OBCONO='100'";
-                 * $results=odbc_Exec($conn,$query);
-                 * if($results ==null){$this->_helper->redirector->gotoSimple('create', 'xprice', null, array('numwp' => $_POST['num_offre_worplace']));}
-                 * else{
-                 * $flashMessenger = $this->_helper->Flashmessenger;
-                 * $message = "ce numéro d'offre n'a pas de concordance dans la base MOVEX";
-                 * $flashMessenger->addMessage($message);
-                 * $form->populate($this->getRequest()->getPost());}
-                 */
+                
             } else {
                 $form->populate($this->getRequest()->getPost());
             }
         }
-
-        //$form->submit->setLabel('Entrer');
         $this->view->form = $form;
     }
 
@@ -83,73 +57,35 @@ class XpriceController extends Zend_Controller_Action {
                     . "OOLINE.OBRGDT AS date_offre "
                     . "from OOLINE where OOLINE.OBORNO='{$numwp}' "
                     . "group by OOLINE.OBORNO;";
-            $this->view->infos_offre = odbc_fetch_object(odbc_exec($this->odbc_conn, $query));
+            $infos_offre= odbc_fetch_object(odbc_exec($this->odbc_conn, $query));
+            echo '<pre>',  var_export($infos_offre->date_offre,false),'</pre>';
+            $this->view->infos_offre=$infos_offre;
             $user = $this->_auth->getStorage()->read();
             $zoneT = new Application_Model_DbTable_Zones();
             $zone = $zoneT->fetchRow(array('id_zone' => $user->id_zone));
             $Xprices = new Application_Model_DbTable_Xprices();
-//            $this->view->trackingNumber = Application_Model_DbTable_Xprices::makeTrackingNumber($zone->nom_zone, 1);
-            $this->view->trackingNumber = Application_Model_DbTable_Xprices::makeTrackingNumber($zone->nom_zone, $Xprices->lastId(true));
-            // mag ici :
+            $trackingNumber = Application_Model_DbTable_Xprices::makeTrackingNumber($zone->nom_zone, $Xprices->lastId(true));
+           // $this->view->trackingNumber = Application_Model_DbTable_Xprices::makeTrackingNumber($zone->nom_zone, $Xprices->lastId(true));
+            $this->view->trackingNumber=$trackingNumber;
 // requetes pour remplir le phtml :
-            //requete 1 pour remplir  les données du commercial
+            //requete 1 pour remplir  les données du commercial à partir du numwp
             $query1 = "SELECT OOLINE.OBSMCD  as userwp "
                     . "FROM OOLINE "
                     . "WHERE OOLINE.OBORNO='{$numwp}' "
                     . "GROUP BY OOLINE.OBORNO;";
                     $numwp_user= odbc_fetch_array(odbc_exec($this->odbc_conn,$query1));
-                    //echo var_dump($numwp_user);
                     $usertest = new Application_Model_DbTable_Users();
                     $user_info = $usertest->getMovexUser($numwp_user['userwp']);
-                    //echo '<pre>',  var_export($user_info, false),'</pre>';
                     $this->view->user_info=$user_info;
-//                    $nom_user1 = $user_info['nom_user'];
-//                    $prenom_user1 = $user_info['prenom_user'];
-//                    $tel_user1 = $user_info['tel_user'];
-//                    $email_user1 = $user_info['email_user'];
                     $id_holon = $user_info['id_holon'];
-//                    $id_user1 = $user_info['id_user'];
                     $holonuser = new Application_Model_DbTable_Holons();
                     $holonuser1 = $holonuser->getHolon($id_holon);
                     $nom_holon = $holonuser1['nom_holon'];
                     $this->view->holon=$nom_holon;
-                    
-            /*
-             * $dsn2="DRIVER=Client Acess ODBC Driver(32-bit);UID=EU65535;PWD=CCS65535;SYSTEM=10.105.80.32;DBQ=CVXCDTA";
-             * $mmcono = "100";
-             * $division = "FR0;
-             * $facility = "I01";
-             * $type = "3";
-             * $warehouse = "I02";
-             * $supplier = "I990001";
-             * $agreement1 = "I000001";
-             * $agreement2 = "I000002";
-             * $agreement3 = "I000003";
-             *
-             * $conn2 = odbc_connect($dsn2,"","");
-             * if(!$conn2){
-             * echo "pas d'accès à la base de données";
-             * }
-             * $query = "SELECT
-             * OOLINE.OBORNO,
-             * ccccccccccccccc,
-             * OOLINE.OBITNO,
-             * OOLINE.OBITDS,
-             * OOLINE.OBORQT,
-             * OOLINE.OBLNA2,
-             * OOLINE.OBLNAM,
-             * OOLINE.OBNEPR,
-             * OOLINE.OBSAPR,
-             * OOLINE.OBELNO,
-             * OOLINE.OBRGTD,
-             * OOLINE.OBLMDT,
-             * OOLINE.OBSMCD
-             * FROM EIT.CVXCDTA.OOLINE OOLINE WHERE OOLINE.OBORNO ='$numwp' AND OOLINE.OBDIVI='FR0' and OOLINE.OBCONO='100'";
-             * $resultats=odbc_Exec($conn2,$query);
-             * while($resultat=odbc_fetch_object($resultats){
-             *
-             * }
-             */
+                    /*
+                     * on va chercher les informations concernant les articles dans la table ooline à partir du numwp
+                     * pour pouvoir ensuite les afficher dans la vue à l'aide d'un foreach
+                     */
             $query2="select "
                 ."OOLINE.OBORNO,"
                 ."OOLINE.OBCUNO,"
@@ -164,27 +100,29 @@ class XpriceController extends Zend_Controller_Action {
                 ."OOLINE.OBLMDT,"
                 ."OOLINE.OBSMCD "
                 ."from OOLINE WHERE OOLINE.OBORNO='{$numwp}' AND OOLINE.OBDIVI LIKE 'FR0' AND OOLINE.OBCONO=100";
-              //echo var_dump( $query2);
                 $resultats=odbc_exec($this->odbc_conn, $query2) ;
-               
-              // foreach($resultats as $result){
               
         while ( $resultat[]=odbc_fetch_array($resultats)){
-           // echo '<pre>', var_export($resultat[1],false),'</pre>';
         $this->view->resultat=$resultat;
-        //var_dump($resultat[0]['OBCUNO']);
        
         }
+        /*
+         * à partir du code client de la table ooline on va chercher dans la table ocusma
+         * les informations concernant le client pour pouvoir les afficher dans la vue phtml
+         */
           $query1bis="select * "
                 . "from OCUSMA "
                 . "where OCUSMA.OKCUNO = '{$resultat[0]['OBCUNO']}'";
-        //var_dump($query1bis);
         $infos_client = odbc_fetch_array(odbc_exec($this->odbc_conn, $query1bis));
         $this->view->infos_client=$infos_client;
-        //var_dump($infos_client['OKCUCL']);
-        //$industry = new Application_Model_DbTable_Industry();
-        //$info_industry = $industry->getMovexIndustry($infos_client['OKCUCL']);
-        //echo '<pre>',  var_export($info_industry, false),'</pre>';
+        /*
+         * information concernant  le projet industry auquel appartient le client
+         *    donc à partir du code movex industry on va chercher dans la base xsuite
+         *  le nom de l'industrie auquel le client appartient pour ensuite l'afficher dans la vue 
+         */
+        $industry = new Application_Model_DbTable_Industry();
+        $info_industry = $industry->getMovexIndustry($infos_client['OKCUCL']);
+        $this->view->info_industry=$info_industry;
         }
 
         // franck là :
@@ -192,25 +130,28 @@ class XpriceController extends Zend_Controller_Action {
         if ($this->getRequest()->isPost()) {
             $formData = $this->getRequest()->getPost();
             if ($form->isValid($formData)) {
-                //alors on insert dans la base mysql
-                //dans un premier temps
-                //la requete suivante : INSERT INTO `demande_xprices`
-                //(`id_demande_xprice`, `num_workplace_demande_xprice`, `tracking_number_demande_xprice`,
-                // `commentaire_demande_xprice`, `date_demande_xprice`,
-                //  `id_demande_article`, `id_user`, `id_client`, `id_validation`)
-                // VALUES ('',value2,value3,value4,value5,value6,value7,value8,value9)
-                //$demandes_xprice = new Application_Model_DbTable_Xprices();
-                //$demande_xprice = $demandes_xprice ->createXprice(
-                //$formData['num_offre_worplace'],
-                //$formData['tracking_number'],
-                //$formData['commentaire'],
-                //$formData['date_demande_xprice'],
-                //null,
-                //$formData['id_user'],
-                //$formData['id_client'],
-                //null);
-                // et ensuite on envoi un mail à fobfr avec un lien qyui renvoi vers l'action prixfobfr avec le tracking number pour qu'il mette les prix fob et les prix cif ,
-                // et un mail au chef de vente  avec un lien vers l'action validation chef de vente avec le tracking number .
+                echo '<pre>', var_export($formData,false),'<pre>';
+                //alors si le client n'existe pas ' on insert d'abord dans la table client 
+                // et ensuite  on insert dans la table demande_xprices
+                //si le client existe  alors on insert immédiatement dans la table demande_xprices
+                $demandes_xprice = new Application_Model_DbTable_Xprices();
+                $demande_xprice = $demandes_xprice ->createXprice(
+                $numwp,
+                $trackingNumber,
+                $formData['commentaire_demande_article'],
+                $infos_offre->date_offre,
+                $formData['mini_demande_article'],
+                $user_info['id_user'],
+                        null,
+                $infos_client['OKCUNO']);
+                echo '<pre>',  var_export($demande_xprice, false),'</pre>';
+                /*
+                 * ici insertion dans les tables articles et demande_article_xprices 
+                 * à partir d'un foreach sur $resultat
+                 * 
+                 * donc pour chaque ligne du tableau $resultat  on insert d'abord dans la table articles
+                 *  puis dans la table demande_article_xprices
+                 */
             } else {
                 $form->populate($formData);
             }

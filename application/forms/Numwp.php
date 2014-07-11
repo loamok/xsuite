@@ -12,7 +12,7 @@ class Application_Form_Numwp extends Zend_Form {
                 ->setRequired(TRUE)
                 ->addFilter('StripTags')
                 ->addFilter('StringTrim')
-                ->addValidator('regex', false, array('/^00[6][0][9][0-9]/', 'messages' => array(Zend_Validate_Regex::NOT_MATCH => "numéro invalide")))
+                ->addValidator('regex', false, array('/^00[9][0][6][0-9]/', 'messages' => array(Zend_Validate_Regex::NOT_MATCH => "numéro invalide")))
                 ->addValidator('NotEmpty', true, array('messages' => array(Zend_Validate_NotEmpty::IS_EMPTY => "le champ offre workplace ne peut pas être vide.")));
 
         $submit = new Zend_Form_Element_Submit('submit');

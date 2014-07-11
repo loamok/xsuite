@@ -65,7 +65,7 @@ $this->headTitle($this->title);
             </tr>
             <tr>
                 <td>Projet industrie:</td>
-                <td><?php ?></td>
+                <td><?php echo $this->info_industry['nom_industry']?></td>
             </tr>
             <tr>
                 <td>Potentiel:</td>
@@ -106,51 +106,6 @@ $this->headTitle($this->title);
         </table>
     </fieldset>
 </div>
-<form>
-    <div id="justificatif">
-        <fieldset id="justificatif_offre">
-            <legend>Justificatif de la demande</legend>
-            <table>
-                <tr>
-                    <td>Concurrent visé:</td>
-                    <td><input id="concurrent"/></td>
-                </tr>
-                <tr>
-                    <td>Part de marché :</td>
-                    <td><input id="partMarche" value=""/></td>
-                </tr>
-                <tr>
-                    <td>Minimum de commande : </br><p class="petit">(ex: 200kits machines commandés tous les 2 mois)</p></td>
-                    <td><input id="minimum" value=""/></td>
-                </tr>
-                <tr>
-                    <td>Démarche stratégique :</td>
-                    <td>
-                        <select id="demarche">
-                            <option value="">choisissez une démarche</option>
-                            <option value="concentration"> concentration des efforts</option>
-                            <option value="faible">attaquer le faible</option>
-                            <option value="globalisation">globalisation</option>
-                        </select>
-                    </td>
-                </tr>
-            </table>
-        </fieldset>
-    </div>
-    <div id="commentaire">
-        <fieldset id="commentaires">
-            <legend>Commentaires</legend>
-            <textarea rows="10" cols="100"></textarea>
-        </fieldset>
-    </div>
-    <div id="envoi">
-        <input type="submit" value="Enregistrez l'offre"/>
-    </div>
-</form>
-<div style="width: 750px;
-float: left;
-margin-bottom: 25px;
-margin-left: 25px;">
-<hr />
+<div id="formcreate">
 <?php echo $this->form; ?>
 </div>

@@ -125,7 +125,7 @@ h3{
 #menu{
     font-weight: bold;
     font-family: arial;
-    font-size:12px;
+    font-size:10px;
 }
 
 #menu a {
@@ -241,15 +241,23 @@ h3{
     width: 200px;
 }
 
-#envoi{
+#submit-element{
     float:left;
-    width: 725px;
+    width: 125px;
     margin-top: 30px;
     margin-left:315px;
     margin-bottom: 30px;
+    height: 50px;
     border: none;
 }
-#fieldset commentaires{
+
+#submit{
+    height: 50px;
+    background-color:#268bd9;
+    color:white;
+}
+
+#fieldset-commentaires{
     width: 725px;
     float:left;
     margin-bottom:25px;
@@ -290,20 +298,40 @@ fieldset legend{
     border-radius:7px;
 }
 
-#justificatif{
+#fielset-justificatif{
     width: 750px;
     float:left;
     margin-bottom:25px;
     margin-left:25px;
 }
 
-p.petit{
-    font-size: 10px;
-}
 
-#commentaire{
+#formcreate{
     width: 750px;
     float:left;
     margin-bottom:25px;
     margin-left:25px;
+}
+
+#faible-label,
+#mini_demande_article-label,
+#part_demande_article-label,
+#concurrent_demande_article-label{
+    float: left;
+    width : 360px;
+    height: 70px;
+    margin-left: 10px;
+    padding-top: 20px;
+}
+
+#faible-element,
+#mini_demande_article-element,
+#part_demande_article-element,
+#concurrent_demande_article-element{
+    float: right;
+    width : 200px;
+    height: 55px;
+    margin-right: 100px;
+    padding-top: 10px;
+    margin-top: 10px;
 }
