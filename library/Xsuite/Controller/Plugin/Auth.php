@@ -44,7 +44,7 @@ class Xsuite_Controller_Plugin_Auth extends Zend_Controller_Plugin_Abstract
         
         if($this->_auth->hasIdentity()) {
             $user = $this->_auth->getStorage()->read();
-            echo '<pre>',  var_export($user, true),'</pre>';
+//            echo '<pre>',  var_export($user, true),'</pre>';
             $role = $user->niveau;
             $sAuth = new Zend_Session_Namespace('sAuth');
             $sAuth->setExpirationSeconds((int)3600);
