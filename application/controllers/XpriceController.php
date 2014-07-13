@@ -25,44 +25,55 @@ class XpriceController extends Zend_Controller_Action {
     public function numwpAction() {
 
         $form = new Application_Form_Numwp();
+        if ($this->getRequest()->isPost()) {
+
+            if ($form->isValid($this->getRequest()->getPost())) {
+                $this->_helper->redirector->gotoSimple('create', 'Xprice', null, array('numwp' => $_POST['num_offre_worplace']));
+            } else {
+                $form->populate($this->getRequest()->getPost());
+            }
+        }
+
         //$form->submit->setLabel('Entrer');
         $this->view->form = $form;
     }
 
     public function createAction() {
-        if (preg_match("#^00[6][0][9][0-9]#", $_POST["num_offre_worplace"])) {
-            $form = new Application_Form_CreationXprice();
-            // $form->submit->setLabel('Creer');
-            $this->view->form = $form;
 
-            if ($this->getRequest()->isPost()) {
-                $formData = $this->getRequest()->getPost();
-                if ($form->isValid($formData)) {
-                    //alors on insert dans la base mysql
-                    //dans un premier temps
-                    //la requete suivante : INSERT INTO `demande_xprices`
-                    //(`id_demande_xprice`, `num_workplace_demande_xprice`, `tracking_number_demande_xprice`,
-                    // `commentaire_demande_xprice`, `date_demande_xprice`,
-                    //  `id_demande_article`, `id_user`, `id_client`, `id_validation`)
-                    // VALUES ('',value2,value3,value4,value5,value6,value7,value8,value9)
-                    //$demandes_xprice = new Application_Model_DbTable_Xprices();
-                    //$demande_xprice = $demandes_xprice ->createXprice(
-                    //$formData['num_offre_worplace'],
-                    //$formData['tracking_number'],
-                    //$formData['commentaire'],
-                    //$formData['date_demande_xprice'],
-                    //null,
-                    //$formData['id_user'],
-                    //$formData['id_client'],
-                    //null);
-                    // et ensuite on envoi un mail à fobfr avec un lien qyui renvoi vers l'action prixfobfr avec le tracking number pour qu'il mette les prix fob et les prix cif ,
-                    // et un mail au chef de vente  avec un lien vers l'action validation chef de vente avec le tracking number .
-                } else {
-                    $form->populate($formData);
-                }
+        $form = new Application_Form_CreationXprice();
+        // $form->submit->setLabel('Creer');
+        $this->view->form = $form;
+
+        $numwp = $this->getRequest()->getParam('numwp', null);
+        if (!is_null($numwp)) {
+            echo 'tagada :<pre>', var_export($numwp, true), "</pre>";
+        }
+
+        if ($this->getRequest()->isPost()) {
+            $formData = $this->getRequest()->getPost();
+            if ($form->isValid($formData)) {
+                //alors on insert dans la base mysql
+                //dans un premier temps
+                //la requete suivante : INSERT INTO `demande_xprices`
+                //(`id_demande_xprice`, `num_workplace_demande_xprice`, `tracking_number_demande_xprice`,
+                // `commentaire_demande_xprice`, `date_demande_xprice`,
+                //  `id_demande_article`, `id_user`, `id_client`, `id_validation`)
+                // VALUES ('',value2,value3,value4,value5,value6,value7,value8,value9)
+                //$demandes_xprice = new Application_Model_DbTable_Xprices();
+                //$demande_xprice = $demandes_xprice ->createXprice(
+                //$formData['num_offre_worplace'],
+                //$formData['tracking_number'],
+                //$formData['commentaire'],
+                //$formData['date_demande_xprice'],
+                //null,
+                //$formData['id_user'],
+                //$formData['id_client'],
+                //null);
+                // et ensuite on envoi un mail à fobfr avec un lien qyui renvoi vers l'action prixfobfr avec le tracking number pour qu'il mette les prix fob et les prix cif ,
+                // et un mail au chef de vente  avec un lien vers l'action validation chef de vente avec le tracking number .
+            } else {
+                $form->populate($formData);
             }
-        } else {
-            $this->_helper->redirector('numwp');
         }
     }
 

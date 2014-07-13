@@ -196,15 +196,15 @@ h3{
     height: auto;
     margin-bottom : 20px;
 }
-#fieldset-info_user{
+#info_user{
     width: 300px;
     float: left;
     margin-left: 25px;
 }
-#fieldset-info_client{
+#info_client{
     width: 300px;
     float:left;
-    margin-left: 85px;
+    margin-left: 75px;
 }
 #information table{
 
