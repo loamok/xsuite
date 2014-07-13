@@ -2,6 +2,10 @@
 
 class LoginController extends Zend_Controller_Action {
 
+    public function aclfailAction() {
+        
+    }
+    
     public function indexAction() {
         $loginForm = new Application_Form_Login();
         $request = $this->getRequest();
@@ -10,7 +14,7 @@ class LoginController extends Zend_Controller_Action {
             if ($loginForm->isValid($request->getPost())) {
                 if ($this->_process($loginForm->getValues())) {
                     $this->_helper->redirector('index', 'index');
-                }
+                } // else message d'erreur de login mot de passe
             }
         }
 
