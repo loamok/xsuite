@@ -10,7 +10,7 @@ class Application_Form_CreationXprice extends Zend_Form {
          *      $prix_article             = $resultat->OBSAPR;
          *      $prix_demande_article     = $resultat->OBNEPR;
          *      $quantite_demande_article = $resultat->OBRQT;
-         *      $numero_offre             = $resultat->OBORNO;
+         *      $numero_offre_workplace   = $resultat->OBORNO;
          *      $num_workplace_user       = $resultat->OBSMCD;
          *      $num_workplace_client     = $resultat->OBCUNO;
          *      $date_demande             = $resultat->OBRGDT;
@@ -53,8 +53,7 @@ class Application_Form_CreationXprice extends Zend_Form {
         $holonuser = new Application_Model_DbTable_Holons();
         $holonuser1 = $holonuser->getHolon($id_holon);
         $nom_holon = $holonuser1['nom_holon'];
-        var_dump($usermap);
-        var_dump($nom_holon);
+
         /* fieldset offre */
 
         $num_offre_workplace = new Zend_Form_Element_Text('num_offre_worplace');
