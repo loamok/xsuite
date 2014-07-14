@@ -2,28 +2,13 @@
 
 class XpriceController extends Zend_Controller_Action {
 
-//    public function init() {
-//        /* Initialize action controller here */
-//        /* @todo commentaire franck
-//         * Exemple d'authentification forcée pour toutes les actions de ce controlleur
-//         */
-//        $auth = Zend_Auth::getInstance();
-//        $user = $auth->getIdentity();
-//        if (is_null($user)) {
-//            $this->_helper->redirector('index', 'login');
-//        } else {
-//            /* @todo commentaire franck
-//             * Et donc, ici, on peut faire de l'acl de manière plus fine
-//             */
-//        }
-//    }
 //    public $dsn="DRIVER=Client Acess ODBC Driver(32-bit);UID=EU65535;PWD=CCS65535;SYSTEM=10.105.80.32;DBQ=CVXCDTA";
     public $dsn = "DRIVER={MySQL};Server=127.0.0.1;Database=CVXCDTA;UID=EU65535;PWD=CCS65535;";
     public $odbc_conn = null;
     protected $_auth = null;
 
     public function init() {
-        $this->odbc_conn = odbc_connect($this->dsn, "","");
+        $this->odbc_conn = odbc_connect($this->dsn, "", "");
         if (!$this->odbc_conn) {
             echo "pas d'accès à la base de données";
         }
@@ -45,7 +30,8 @@ class XpriceController extends Zend_Controller_Action {
                 $results = odbc_exec($this->odbc_conn, $query);
                 $r = odbc_fetch_object($results);
                 if ($r->nbNumwp > 1) {
-                    $this->_helper->redirector->gotoSimple('create', 'xprice', null, array('numwp' => $_POST['num_offre_worplace']));
+                    $redirector = $this->_helper->getHelper('Redirector');
+                    $redirector->gotoSimple('create', 'xprice', null, array('numwp' => $_POST['num_offre_worplace']));
                 } else {
                     $flashMessenger = $this->_helper->getHelper('FlashMessenger');
                     $message = "ce numéro d'offre n'a pas de concordance dans la base MOVEX";
@@ -87,11 +73,6 @@ class XpriceController extends Zend_Controller_Action {
     }
 
     public function createAction() {
-
-        $form = new Application_Form_CreationXprice();
-        // $form->submit->setLabel('Creer');
-        $this->view->form = $form;
-
         $numwp = $this->getRequest()->getParam('numwp', null);
         $this->view->numwp = $numwp;
         if (!is_null($numwp)) {
@@ -109,6 +90,8 @@ class XpriceController extends Zend_Controller_Action {
             $Xprices = new Application_Model_DbTable_Xprices();
 //            $this->view->trackingNumber = Application_Model_DbTable_Xprices::makeTrackingNumber($zone->nom_zone, 1);
             $this->view->trackingNumber = Application_Model_DbTable_Xprices::makeTrackingNumber($zone->nom_zone, $Xprices->lastId(true));
+            // mag ici :
+
             /*
              * $dsn2="DRIVER=Client Acess ODBC Driver(32-bit);UID=EU65535;PWD=CCS65535;SYSTEM=10.105.80.32;DBQ=CVXCDTA";
              * $mmcono = "100";
@@ -147,32 +130,35 @@ class XpriceController extends Zend_Controller_Action {
              */
         }
 
-        if ($this->getRequest()->isPost()) {
-            $formData = $this->getRequest()->getPost();
-            if ($form->isValid($formData)) {
-                //alors on insert dans la base mysql
-                //dans un premier temps
-                //la requete suivante : INSERT INTO `demande_xprices`
-                //(`id_demande_xprice`, `num_workplace_demande_xprice`, `tracking_number_demande_xprice`,
-                // `commentaire_demande_xprice`, `date_demande_xprice`,
-                //  `id_demande_article`, `id_user`, `id_client`, `id_validation`)
-                // VALUES ('',value2,value3,value4,value5,value6,value7,value8,value9)
-                //$demandes_xprice = new Application_Model_DbTable_Xprices();
-                //$demande_xprice = $demandes_xprice ->createXprice(
-                //$formData['num_offre_worplace'],
-                //$formData['tracking_number'],
-                //$formData['commentaire'],
-                //$formData['date_demande_xprice'],
-                //null,
-                //$formData['id_user'],
-                //$formData['id_client'],
-                //null);
-                // et ensuite on envoi un mail à fobfr avec un lien qyui renvoi vers l'action prixfobfr avec le tracking number pour qu'il mette les prix fob et les prix cif ,
-                // et un mail au chef de vente  avec un lien vers l'action validation chef de vente avec le tracking number .
-            } else {
-                $form->populate($formData);
-            }
-        }
+        // franck là :
+        /*
+          if ($this->getRequest()->isPost()) {
+          $formData = $this->getRequest()->getPost();
+          //            if ($form->isValid($formData)) {
+          //                //alors on insert dans la base mysql
+          //                //dans un premier temps
+          //                //la requete suivante : INSERT INTO `demande_xprices`
+          //                //(`id_demande_xprice`, `num_workplace_demande_xprice`, `tracking_number_demande_xprice`,
+          //                // `commentaire_demande_xprice`, `date_demande_xprice`,
+          //                //  `id_demande_article`, `id_user`, `id_client`, `id_validation`)
+          //                // VALUES ('',value2,value3,value4,value5,value6,value7,value8,value9)
+          //                //$demandes_xprice = new Application_Model_DbTable_Xprices();
+          //                //$demande_xprice = $demandes_xprice ->createXprice(
+          //                //$formData['num_offre_worplace'],
+          //                //$formData['tracking_number'],
+          //                //$formData['commentaire'],
+          //                //$formData['date_demande_xprice'],
+          //                //null,
+          //                //$formData['id_user'],
+          //                //$formData['id_client'],
+          //                //null);
+          //                // et ensuite on envoi un mail à fobfr avec un lien qyui renvoi vers l'action prixfobfr avec le tracking number pour qu'il mette les prix fob et les prix cif ,
+          //                // et un mail au chef de vente  avec un lien vers l'action validation chef de vente avec le tracking number .
+          //            } else {
+          //                $form->populate($formData);
+          //            }
+          }
+         */
     }
 
     public function prixfobfrAction() {
