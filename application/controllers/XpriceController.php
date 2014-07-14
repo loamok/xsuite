@@ -18,7 +18,7 @@ class XpriceController extends Zend_Controller_Action {
 //        }
 //    }
 //    public $dsn="DRIVER=Client Acess ODBC Driver(32-bit);UID=EU65535;PWD=CCS65535;SYSTEM=10.105.80.32;DBQ=CVXCDTA";
-    public $dsn = "DRIVER={MySQL ODBC 3.51 Driver};Server=localhost;Database=CVXCDTA;EU65535;CCS65535";
+    public $dsn = "DRIVER={MySQL};Server=127.0.0.1;Database=CVXCDTA;UID=EU65535;PWD=CCS65535";
     public $odbc_conn = null;
 
     public function init() {
