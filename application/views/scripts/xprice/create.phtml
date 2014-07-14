@@ -9,15 +9,15 @@ $this->headTitle($this->title);
         <table>
             <tr>
                 <td>Numéro workplace de l'offre :</td>
-                <td><?php echo $this->numwp; ?></td>
+                <td><?php echo $this->infos_offre->numwp; ?></td>
             </tr>
             <tr>
                 <td>Date de l'offre workplace :</td>
-                <td>$date_offre</td>
+                <td><?php echo str_replace("-", "/", $this->infos_offre->date_offre); ?></td>
             </tr>
             <tr>
                 <td>Tracking number :</td>
-                <td>$tracking_number</td>
+                <td><?php echo $this->trackingNumber; ?></td>
             </tr>
         </table>
     </fieldset>

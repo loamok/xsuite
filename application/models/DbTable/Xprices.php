@@ -4,13 +4,12 @@ class Application_Model_DbTable_Xprices extends Zend_Db_Table_Abstract {
 
     protected $_name = 'demande_xprices';
 
-    public function createXprice($num_workplace_demande_xprice, $tracking_number_demande_xprice, $commentaire_demande_xprice, $date_demande_xprice, $id_demande_article, $id_user, $id_validation) {
+    public function createXprice($num_workplace_demande_xprice, $tracking_number_demande_xprice, $commentaire_demande_xprice, $date_demande_xprice, $id_user, $id_validation=null) {
         $data = array(
             'num_workplace_demande_xprice' => $num_workplace_demande_xprice,
             'tracking_number_demande_xprice' => $tracking_number_demande_xprice,
             'commentaire_demande_xprice' => $commentaire_demande_xprice,
             'date_demande_xprice' => $date_demande_xprice,
-            'id_demande_xprice' => $id_demande_article,
             'id_user' => $id_user,
             'id_validation' => $id_validation
         );
@@ -18,14 +17,13 @@ class Application_Model_DbTable_Xprices extends Zend_Db_Table_Abstract {
         return $this;
     }
 
-    public function updateXprice($id_demande_xprice, $num_workplace_demande_xprice, $tracking_number_demande_xprice, $commentaire_demande_xprice, $date_demande_xprice, $id_demande_article, $id_user, $id_validation) {
+    public function updateXprice($id_demande_xprice, $num_workplace_demande_xprice, $tracking_number_demande_xprice, $commentaire_demande_xprice, $date_demande_xprice, $id_user, $id_validation=null) {
 
         $data = array(
             'num_workplace_demande_xprice' => $num_workplace_demande_xprice,
             'tracking_number_demande_xprice' => $tracking_number_demande_xprice,
             'commentaire_demande_xprice' => $commentaire_demande_xprice,
             'date_demande_xprice' => $date_demande_xprice,
-            'id_demande_xprice' => $id_demande_article,
             'id_user' => $id_user,
             'id_validation' => $id_validation
         );
@@ -38,6 +36,26 @@ class Application_Model_DbTable_Xprices extends Zend_Db_Table_Abstract {
                 . " join demande_articles_xprice"
                 . " on demande_xprices.tracking_number_demande_xprice = demande_articles_xprice.tracking_number_demande_xprice "
                 . "where tracking_number_demande_xprice =$trackingNumber "; 
+    }
+    
+    public static function makeTrackingNumber($zone, $nombre) {
+        $annee = 'S';
+        // @todo générer l'année
+        // construction du nombre
+        $baseNombre = "00000";
+        $grandNombre = "{$baseNombre}{$nombre}";
+        $nombre = substr($grandNombre, strlen("{$nombre}"));
+        return "SP-FR-{$zone}{$annee}{$nombre}";
+    }
+    
+    public function lastId($increase = false) {
+        $sql = $this->getAdapter()->query("select MAX(id_demande_xprice) AS lastId from demande_xprices;");
+        $res = $sql->fetchObject();
+        if($increase) {
+            return $res->lastId + 1;
+        } else {
+            return $res->lastId;
+        }
     }
 }
 

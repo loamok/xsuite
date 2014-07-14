@@ -18,14 +18,16 @@ class XpriceController extends Zend_Controller_Action {
 //        }
 //    }
 //    public $dsn="DRIVER=Client Acess ODBC Driver(32-bit);UID=EU65535;PWD=CCS65535;SYSTEM=10.105.80.32;DBQ=CVXCDTA";
-    public $dsn = "DRIVER={MySQL};Server=127.0.0.1;Database=CVXCDTA";
+    public $dsn = "DRIVER={MySQL};Server=127.0.0.1;Database=CVXCDTA;UID=EU65535;PWD=CCS65535;";
     public $odbc_conn = null;
+    protected $_auth = null;
 
     public function init() {
-        $this->odbc_conn = odbc_connect($this->dsn, "root", "geek");
+        $this->odbc_conn = odbc_connect($this->dsn, "","");
         if (!$this->odbc_conn) {
             echo "pas d'accès à la base de données";
         }
+        $this->_auth = Zend_Auth::getInstance();
         $this->view->messages = $this->_helper->flashMessenger->getMessages();
     }
 
@@ -94,6 +96,19 @@ class XpriceController extends Zend_Controller_Action {
         $this->view->numwp = $numwp;
         if (!is_null($numwp)) {
             //si le numero workplace est valide alors on fait la requête pour movex
+            // requête d'informations de l'offre
+            $query = "select "
+                    . "OOLINE.OBORNO AS numwp, "
+                    . "OOLINE.OBRGDT AS date_offre "
+                    . "from OOLINE where OOLINE.OBORNO='{$numwp}' "
+                    . "group by OOLINE.OBORNO;";
+            $this->view->infos_offre = odbc_fetch_object(odbc_exec($this->odbc_conn, $query));
+            $user = $this->_auth->getStorage()->read();
+            $zoneT = new Application_Model_DbTable_Zones();
+            $zone = $zoneT->fetchRow(array('id_zone' => $user->id_zone));
+            $Xprices = new Application_Model_DbTable_Xprices();
+//            $this->view->trackingNumber = Application_Model_DbTable_Xprices::makeTrackingNumber($zone->nom_zone, 1);
+            $this->view->trackingNumber = Application_Model_DbTable_Xprices::makeTrackingNumber($zone->nom_zone, $Xprices->lastId(true));
             /*
              * $dsn2="DRIVER=Client Acess ODBC Driver(32-bit);UID=EU65535;PWD=CCS65535;SYSTEM=10.105.80.32;DBQ=CVXCDTA";
              * $mmcono = "100";

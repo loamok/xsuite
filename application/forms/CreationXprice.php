@@ -29,14 +29,13 @@ class Application_Form_CreationXprice extends Zend_Form {
          *
          */
         /* Construction du tracking number
-
          * pour le cas des Xprice le tracking number se constituera de la manière suivante :
          * concaténation de :
          * SP =spécial price
          * FR pour france
          * la zone QA,QE,QF.....
          * l'année qui est indiquée par le japon est qui est désigné par une lettre
-         * et pour finir  un numéro qui correspondra  au dernier id entré+1' cela donnera
+         * et pour finir un numéro qui correspondra au dernier id entré+1 cela donnera
          * SP-FR-QAS1
          */
         $this->setMethod('post');
@@ -57,8 +56,7 @@ class Application_Form_CreationXprice extends Zend_Form {
         /* fieldset offre */
 
         $num_offre_workplace = new Zend_Form_Element_Text('num_offre_worplace');
-        $num_offre_workplace->setLabel("Numéro d'offre workplace : ")
-                ->setValue($_POST["num_offre_worplace"]);
+        $num_offre_workplace->setLabel("Numéro d'offre workplace : ");
 
         $date_offre = new Zend_Form_Element_Text('date_offre');
         $date_offre->setLabel("Date de l'offre :");
