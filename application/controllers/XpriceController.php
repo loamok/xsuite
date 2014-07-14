@@ -17,6 +17,16 @@ class XpriceController extends Zend_Controller_Action {
 //             */
 //        }
 //    }
+//    public $dsn="DRIVER=Client Acess ODBC Driver(32-bit);UID=EU65535;PWD=CCS65535;SYSTEM=10.105.80.32;DBQ=CVXCDTA";
+    public $dsn = "DRIVER={MySQL ODBC 3.51 Driver};Server=localhost;Database=CVXCDTA;EU65535;CCS65535";
+    public $odbc_conn = null;
+
+    public function init() {
+        $this->odbc_conn = odbc_connect($this->dsn, "", "");
+        if (!$this->odbc_conn) {
+            echo "pas d'accès à la base de données";
+        }
+    }
 
     public function indexAction() {
         // action body
@@ -28,6 +38,8 @@ class XpriceController extends Zend_Controller_Action {
         if ($this->getRequest()->isPost()) {
 
             if ($form->isValid($this->getRequest()->getPost())) {
+                $query = "select COUNT(*) FROM OOLINE  WHERE OOLINE.OBORNO =$_POST->num_offre_workplace";
+
                 /* on vérifie que le numéro existe bien dans la base movex
                  * $dsn="DRIVER=Client Acess ODBC Driver(32-bit);UID=EU65535;PWD=CCS65535;SYSTEM=10.105.80.32;DBQ=CVXCDTA";
                  * $mmcono = "100";
