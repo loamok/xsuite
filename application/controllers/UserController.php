@@ -10,7 +10,7 @@ class UserController extends Zend_Controller_Action {
     public function createAction() {
 
         $form = new Application_Form_User();
-        $form->submit->setLabel('Creer');
+//        $form->submit->setLabel('Creer');
         $this->view->form = $form;
 
         if ($this->getRequest()->isPost()) {
@@ -62,7 +62,7 @@ class UserController extends Zend_Controller_Action {
     }
 
     public function deleteAction() {
-        
+
     }
 
 }
