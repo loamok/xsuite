@@ -26,7 +26,7 @@ class Application_Model_DbTable_Users extends Zend_Db_Table_Abstract {
      * Ajouter un "return $this" permettrais le chainage des appels
      */
 
-    public function createUser($nom_user, $prenom_user, $tel_user, $email_user, $password_user, $numwp_user, $id_fonction, $id_zone, $id_holon) {
+    public function createUser($nom_user, $prenom_user, $tel_user, $email_user, $password_user, $numwp_user, $id_fonction, $id_zone, $id_holon, $niveau) {
         $data = array(
             'nom_user' => $nom_user,
             'prenom_user' => $prenom_user,
@@ -36,13 +36,14 @@ class Application_Model_DbTable_Users extends Zend_Db_Table_Abstract {
             'numwp_user' => $numwp_user,
             'id_fonction' => $id_fonction,
             'id_zone' => $id_zone,
-            'id_holon' => $id_holon
+            'id_holon' => $id_holon,
+            'niveau' => $niveau
         );
         $this->insert($data);
         return $this;
     }
 
-    public function updateUser($id_user, $nom_user, $prenom_user, $tel_user, $email_user, $password_user, $numwp_user, $id_fonction, $id_zone, $id_holon) {
+    public function updateUser($id_user, $nom_user, $prenom_user, $tel_user, $email_user, $password_user, $numwp_user, $id_fonction, $id_zone, $id_holon, $niveau) {
 
         $data = array(
             'nom_user' => $nom_user,
@@ -53,7 +54,8 @@ class Application_Model_DbTable_Users extends Zend_Db_Table_Abstract {
             'numwp_user' => $numwp_user,
             'id_fonction' => $id_fonction,
             'id_zone' => $id_zone,
-            'id_holon' => $id_holon
+            'id_holon' => $id_holon,
+            'niveau' => $niveau
         );
         $this->update($data, 'id_user=' . (int) $id_user);
         return $this;
@@ -69,7 +71,8 @@ class Application_Model_DbTable_Users extends Zend_Db_Table_Abstract {
         'id_fonction' => $form->getValue('id_fonction'),
         'numwp_user' => $form->getValue('numwp_user'),
         'id_zone' => $form->getValue('id_zone'),
-        'password_user' => $form->getValue('password_user')
+        'password_user' => $form->getValue('password_user'),
+        'niveau' => $form->getValue('niveau')
          );
      $this->insert($data);
      return $this;
@@ -84,7 +87,8 @@ class Application_Model_DbTable_Users extends Zend_Db_Table_Abstract {
         'id_fonction' => $form->getValue('id_fonction'),
         'numwp_user' => $form->getValue('numwp_user'),
         'id_zone' => $form->getValue('id_zone'),
-        'password_user' => $form->getValue('password_user')
+        'password_user' => $form->getValue('password_user'),
+        'niveau' => $form->getValue('niveau')
         );
           $this->update($data, 'id_user=' . (int) $form->getValue('id_user'));
         return $this;

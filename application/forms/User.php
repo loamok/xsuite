@@ -93,6 +93,24 @@ class Application_Form_User extends Zend_Form
         }
         $id_zone->addMultiOptions($zonoptions);
         
+        //sélecteur pour les niveau
+        
+        $niveau= $this->addElement("select",'niveau',array(
+            'label'=>'niveau :',
+            'value'=>-1
+        ))
+        ->getElement('niveau');
+        $nivoptions = array(
+            "-1"=>"choisissez un niveau",
+            "niveau0" => "niveau 0",
+            "niveau1" => "niveau 1",
+            "niveau2" => "niveau 2",
+            "niveau3" => "niveau 3",
+            "niveau4" => "niveau 4"
+        );
+        
+        $niveau->addMultiOptions($nivoptions);
+        
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setAttrib('id_user', 'submitbutton');
         
