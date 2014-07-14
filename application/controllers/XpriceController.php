@@ -18,14 +18,15 @@ class XpriceController extends Zend_Controller_Action {
 //        }
 //    }
 //    public $dsn="DRIVER=Client Acess ODBC Driver(32-bit);UID=EU65535;PWD=CCS65535;SYSTEM=10.105.80.32;DBQ=CVXCDTA";
-    public $dsn = "DRIVER={MySQL};Server=127.0.0.1;Database=CVXCDTA;UID=EU65535;PWD=CCS65535";
+    public $dsn = "DRIVER={MySQL};Server=127.0.0.1;Database=CVXCDTA";
     public $odbc_conn = null;
 
     public function init() {
-        $this->odbc_conn = odbc_connect($this->dsn, "", "");
+        $this->odbc_conn = odbc_connect($this->dsn, "root", "geek");
         if (!$this->odbc_conn) {
             echo "pas d'accès à la base de données";
         }
+        $this->view->messages = $this->_helper->flashMessenger->getMessages();
     }
 
     public function indexAction() {
@@ -38,8 +39,17 @@ class XpriceController extends Zend_Controller_Action {
         if ($this->getRequest()->isPost()) {
 
             if ($form->isValid($this->getRequest()->getPost())) {
-                $query = "select COUNT(*) FROM OOLINE  WHERE OOLINE.OBORNO =$_POST->num_offre_workplace";
-
+                $query = "select COUNT(OOLINE.OBORNO) as nbNumwp FROM OOLINE WHERE OOLINE.OBORNO = '{$_POST['num_offre_worplace']}';";
+                $results = odbc_exec($this->odbc_conn, $query);
+                $r = odbc_fetch_object($results);
+                if ($r->nbNumwp > 1) {
+                    $this->_helper->redirector->gotoSimple('create', 'xprice', null, array('numwp' => $_POST['num_offre_worplace']));
+                } else {
+                    $flashMessenger = $this->_helper->getHelper('FlashMessenger');
+                    $message = "ce numéro d'offre n'a pas de concordance dans la base MOVEX";
+                    $flashMessenger->addMessage($message);
+                    $form->populate($this->getRequest()->getPost());
+                }
                 /* on vérifie que le numéro existe bien dans la base movex
                  * $dsn="DRIVER=Client Acess ODBC Driver(32-bit);UID=EU65535;PWD=CCS65535;SYSTEM=10.105.80.32;DBQ=CVXCDTA";
                  * $mmcono = "100";
@@ -65,7 +75,6 @@ class XpriceController extends Zend_Controller_Action {
                  * $flashMessenger->addMessage($message);
                  * $form->populate($this->getRequest()->getPost());}
                  */
-                $this->_helper->redirector->gotoSimple('create', 'xprice', null, array('numwp' => $_POST['num_offre_worplace']));
             } else {
                 $form->populate($this->getRequest()->getPost());
             }
@@ -82,8 +91,8 @@ class XpriceController extends Zend_Controller_Action {
         $this->view->form = $form;
 
         $numwp = $this->getRequest()->getParam('numwp', null);
+        $this->view->numwp = $numwp;
         if (!is_null($numwp)) {
-            // echo 'tagada :<pre>', var_export($numwp, true), "</pre>";
             //si le numero workplace est valide alors on fait la requête pour movex
             /*
              * $dsn2="DRIVER=Client Acess ODBC Driver(32-bit);UID=EU65535;PWD=CCS65535;SYSTEM=10.105.80.32;DBQ=CVXCDTA";

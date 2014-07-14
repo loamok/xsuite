@@ -1,5 +1,5 @@
 <?php
-$this->headMeta()->appendHttpEquiv('Content-Type','text/html;charset=utf-8');
+$this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
 echo $this->doctype();
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -54,6 +54,13 @@ echo $this->doctype();
                 </ul>
             </div>
             <div id="center">
+                <?php if (count($this->messages)) : ?>
+                    <ul id="messages">
+                        <?php foreach ($this->messages as $message) : ?>
+                            <li><?php echo $this->escape($message); ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
                 <?php echo $this->layout()->content; ?>
             </div>
         </div>
