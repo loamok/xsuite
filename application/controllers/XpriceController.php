@@ -110,7 +110,7 @@ class XpriceController extends Zend_Controller_Action {
              * }
              * $query = "SELECT
              * OOLINE.OBORNO,
-             * OOLINE.OBCUNO,
+             * ccccccccccccccc,
              * OOLINE.OBITNO,
              * OOLINE.OBITDS,
              * OOLINE.OBORQT,
@@ -128,6 +128,24 @@ class XpriceController extends Zend_Controller_Action {
              *
              * }
              */
+            $query2="select "
+                ."OOLINE.OBORNO,"
+                ."OOLINE.OBCUNO,"
+                ."OOLINE.OBITNO,"
+                ."OOLINE.OBITDS,"
+                ."OOLINE.OBORQT,"
+                ."OOLINE.OBLNA2,"
+                ."OOLINE.OBNEPR,"
+                ."OOLINE.OBSAPR,"
+                ."OOLINE.OBELNO,"
+                ."OOLINE.OBRGDT,"
+                ."OOLINE.OBLMDT,"
+                ."OOLINE.OBSMCD "
+                ."from OOLINE WHERE OOLINE.OBORNO='{$numwp}' AND OOLINE.OBDIVI LIKE 'FR0' AND OOLINE.OBCONO=100";
+               
+        while ( $resultat=odbc_fetch_object(odbc_exec($this->odbc_conn, $query2))){
+            echo '<pre>', var_export($resultat,false),'</pre>';
+        }
         }
 
         // franck là :
