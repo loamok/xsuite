@@ -91,7 +91,29 @@ class XpriceController extends Zend_Controller_Action {
 //            $this->view->trackingNumber = Application_Model_DbTable_Xprices::makeTrackingNumber($zone->nom_zone, 1);
             $this->view->trackingNumber = Application_Model_DbTable_Xprices::makeTrackingNumber($zone->nom_zone, $Xprices->lastId(true));
             // mag ici :
-
+// requetes pour remplir le phtml :
+            //requete 1 pour remplir  les données du commercial
+            $query1 = "SELECT OOLINE.OBSMCD  as userwp "
+                    . "FROM OOLINE "
+                    . "WHERE OOLINE.OBORNO='{$numwp}' "
+                    . "GROUP BY OOLINE.OBORNO;";
+                    $numwp_user= odbc_fetch_array(odbc_exec($this->odbc_conn,$query1));
+                    echo var_dump($numwp_user);
+                    $usertest = new Application_Model_DbTable_Users();
+                    $user_info = $usertest->getMovexUser($numwp_user['userwp']);
+                    echo '<pre>',  var_export($user_info, false),'</pre>';
+                    $this->view->user_info=$user_info;
+//                    $nom_user1 = $user_info['nom_user'];
+//                    $prenom_user1 = $user_info['prenom_user'];
+//                    $tel_user1 = $user_info['tel_user'];
+//                    $email_user1 = $user_info['email_user'];
+                    $id_holon = $user_info['id_holon'];
+//                    $id_user1 = $user_info['id_user'];
+                    $holonuser = new Application_Model_DbTable_Holons();
+                    $holonuser1 = $holonuser->getHolon($id_holon);
+                    $nom_holon = $holonuser1['nom_holon'];
+                    $this->view->holon=$nom_holon;
+                    
             /*
              * $dsn2="DRIVER=Client Acess ODBC Driver(32-bit);UID=EU65535;PWD=CCS65535;SYSTEM=10.105.80.32;DBQ=CVXCDTA";
              * $mmcono = "100";
@@ -142,10 +164,17 @@ class XpriceController extends Zend_Controller_Action {
                 ."OOLINE.OBLMDT,"
                 ."OOLINE.OBSMCD "
                 ."from OOLINE WHERE OOLINE.OBORNO='{$numwp}' AND OOLINE.OBDIVI LIKE 'FR0' AND OOLINE.OBCONO=100";
+              //echo var_dump( $query2);
+                $resultats=odbc_exec($this->odbc_conn, $query2) ;
                
-        while ( $resultat=odbc_fetch_object(odbc_exec($this->odbc_conn, $query2))){
-            echo '<pre>', var_export($resultat,false),'</pre>';
+              // foreach($resultats as $result){
+              
+        while ( $resultat[]=odbc_fetch_array($resultats)){
+            //echo '<pre>', var_export($resultat,false),'</pre>';
+        $this->view->resultat=$resultat;
         }
+         
+        
         }
 
         // franck là :
