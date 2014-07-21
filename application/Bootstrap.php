@@ -21,5 +21,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $sAuth->setExpirationSeconds(3600);
     }
     
+    protected function _initMailsender() {
+        date_default_timezone_set('Europe/Paris');
+        $mailConfig = new Zend_Config_Ini(APPLICATION_PATH.'/configs/mail.ini');
+        $email = $mailConfig->get('email');
+        $transport = new Zend_Mail_Transport_Smtp($email->smtp->server, $email->authentification->toArray());
+        Zend_Registry::set("emailVars", $email->vars);
+        Zend_Registry::set("emailSender", $transport);
+        Zend_Registry::set("emailFrom", $email->sender);
+    }
+    
 }
 

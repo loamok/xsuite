@@ -21,22 +21,25 @@ class XpriceController extends Zend_Controller_Action {
     }
 
     public function numwpAction() {
-
+        $numwp = $this->getRequest()->getParam('numwp', null);
         $form = new Application_Form_Numwp();
+        if(!is_null($numwp)) {
+            $form->populate(array("num_offre_worplace" => $numwp));
+        }
         if ($this->getRequest()->isPost()) {
+            $redirector = $this->_helper->getHelper('Redirector');
 
             if ($form->isValid($this->getRequest()->getPost())) {
                 $query = "select COUNT(OOLINE.OBORNO) as nbNumwp FROM OOLINE WHERE OOLINE.OBORNO = '{$_POST['num_offre_worplace']}';";
                 $results = odbc_exec($this->odbc_conn, $query);
                 $r = odbc_fetch_object($results);
                 if ($r->nbNumwp > 1) {
-                    $redirector = $this->_helper->getHelper('Redirector');
                     $redirector->gotoSimple('create', 'xprice', null, array('numwp' => $_POST['num_offre_worplace']));
                 } else {
                     $flashMessenger = $this->_helper->getHelper('FlashMessenger');
                     $message = "ce numéro d'offre n'a pas de concordance dans la base MOVEX";
                     $flashMessenger->addMessage($message);
-                    $form->populate($this->getRequest()->getPost());
+                    $redirector->gotoSimple('numwp', 'xprice', null, array('numwp' => $_POST['num_offre_worplace']));
                 }
             } else {
                 $form->populate($this->getRequest()->getPost());
@@ -47,6 +50,17 @@ class XpriceController extends Zend_Controller_Action {
 
     public function createAction() {
         $numwp = $this->getRequest()->getParam('numwp', null);
+        $demandes_xprice = new Application_Model_DbTable_Xprices();
+        $demandeXprice = $demandes_xprice->getNumwp($numwp);
+        if(!is_null($demandeXprice)){
+            $redirector = $this->_helper->getHelper('Redirector');
+            $flashMessenger = $this->_helper->getHelper('FlashMessenger');
+            $message = "Cette offre a déjà été créée.";
+            $flashMessenger->addMessage($message);
+            $message = "Veuillez cliquer sur : <a href=\"/xprice/update\">'Xprice : Modifier'</a> ou cliquez dans le menu de gauche.";
+            $flashMessenger->addMessage($message);
+            $redirector->gotoSimple('index', 'xprice');
+        }
         $this->view->numwp = $numwp;
         if (!is_null($numwp)) {
             //si le numero workplace est valide alors on fait la requête pour movex
@@ -66,7 +80,7 @@ class XpriceController extends Zend_Controller_Action {
             $trackingNumber = Application_Model_DbTable_Xprices::makeTrackingNumber($zone->nom_zone, $Xprices->lastId(true));
             // $this->view->trackingNumber = Application_Model_DbTable_Xprices::makeTrackingNumber($zone->nom_zone, $Xprices->lastId(true));
             $this->view->trackingNumber = $trackingNumber;
-// requetes pour remplir le phtml :
+            // requetes pour remplir le phtml :
             //requete 1 pour remplir  les données du commercial à partir du numwp
             $query1 = "SELECT OOLINE.OBSMCD  as userwp "
                     . "FROM OOLINE "
@@ -123,7 +137,6 @@ class XpriceController extends Zend_Controller_Action {
             $this->view->info_industry = $info_industry;
         }
 
-        // franck là :
         $form = new Application_Form_CreationDemande();
         if ($this->getRequest()->isPost()) {
             $formData = $this->getRequest()->getPost();
@@ -133,7 +146,7 @@ class XpriceController extends Zend_Controller_Action {
                 $clients = new Application_Model_DbTable_Clients();
                 $client = $clients->getClientnumwp($infos_client['OKCUNO']);
 
-                $adresse_client = $infos_client['OKCUA1'] . $infos_client['OKCUA'] . $infos_client['OKCUA3'] . $infos_client['OKCUA4'];
+                $adresse_client = $infos_client['OKCUA1'] . $infos_client['OKCUA2'] . $infos_client['OKCUA3'] . $infos_client['OKCUA4'];
 
                 if (is_null($client)) {
                     $newclient = $clients->createClient($infos_client['OKCUNM'], $infos_client['OKCUNO'], $adresse_client, $infos_client['OKCUCL']);
@@ -141,7 +154,6 @@ class XpriceController extends Zend_Controller_Action {
                 // et ensuite  on insert dans la table demande_xprices
                 //si le client existe  alors on insert immédiatement dans la table demande_xprices
 
-                $demandes_xprice = new Application_Model_DbTable_Xprices();
                 $numwpexist = $demandes_xprice->getNumwp($numwp);
                 if (is_null($numwpexist)) {
                     $demande_xprice = $demandes_xprice->createXprice(
@@ -163,6 +175,35 @@ class XpriceController extends Zend_Controller_Action {
                     }
                     $demande_xprice = $demandes_xprice->createDemandeArticlexprice($resultarticle['OBNEPR'], $resultarticle['OBSAPR'], $resultarticle['OBORQT'], round($resultarticle['OBNEPR'] * 100 / $resultarticle['OBSAPR'], 2), $infos_offre->date_offre, null, null, null, null, null, $trackingNumber, $resultarticle['OBITNO'], $resultarticle['OBITDS'], $numwp);
                 }
+                /*
+                 * ici, envoi des mails 
+                 */
+                $emailVars = Zend_Registry::get('emailVars');
+                $fobfrMail =  $emailVars->listes->fobfr;
+                $url = "http://{$_SERVER['SERVER_NAME']}/xprice/prixfobfr/numwp/{$numwp}";
+                $corpsMail = "Bonjour,\n"
+                        . "\n"
+                        . "Vous avez une nouvelle demande XPrice à valider.\n"
+                        . "Veuillez vous rendre à l'adresse url : \n"
+                        . "%s"
+                        . "\n\n"
+                        . "Cordialement,\n"
+                        . "\n"
+                        . "--\n"
+                        . "Le service info.";
+                $mail = new Xsuite_Mail();
+                $mail->setSubject("XPrice : Nouvelle demande à valider.")
+                        ->setBodyText(sprintf($corpsMail, $url))
+                        ->addTo($fobfrMail)
+                        ->send();
+                /*
+                 * Fin du traitement
+                 */
+                $flashMessenger = $this->_helper->getHelper('FlashMessenger');
+                $message = "Votre demande à bien été enregistrée.";
+                $flashMessenger->addMessage($message);
+                $redirector = $this->_helper->getHelper('Redirector');
+                $redirector->gotoSimple('index', 'xprice');
             } else {
                 $form->populate($formData);
             }
