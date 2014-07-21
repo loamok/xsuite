@@ -20,6 +20,8 @@
         <dbTableDirectory>
           <dbTableFile dbTableName="Industry"/>
           <dbTableFile dbTableName="Articlexprices"/>
+          <dbTableFile dbTableName="Clients"/>
+          <dbTableFile dbTableName="Article"/>
         </dbTableDirectory>
       </modelsDirectory>
       <modulesDirectory enabled="false"/>
