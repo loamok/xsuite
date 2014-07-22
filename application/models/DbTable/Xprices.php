@@ -71,6 +71,11 @@ class Application_Model_DbTable_Xprices extends Zend_Db_Table_Abstract {
             return $row->toArray();
         }
     }
+    public function fetchAll($numwp){
+        
+    }
+            
+    
 
 }
 

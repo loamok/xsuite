@@ -212,14 +212,33 @@ class XpriceController extends Zend_Controller_Action {
     }
 
     public function prixfobfrAction() {
-        // action body
+       $numwp = $this->getRequest()->getParam('numwp', null);
+       var_dump($numwp);
+       /*
+        * on va rechercher les informations concernant la demande _xprice
+        */
+       $infos_demande_xprice= new Application_Model_DbTable_Xprices();
+       $info_demande_xprice = $infos_demande_xprice->getNumwp($numwp);
+       echo '<pre>',var_export($info_demande_xprice),'</pre>';
+      var_dump( $info_demande_xprice['id_user']);
+      $infos_user=new Application_Model_DbTable_Users();
+      $info_user = $infos_user->getUser($id_user);
+      $infos_client = new Application_Model_DbTable_Clients();
+      $info_client = $infos_client->getClientnumwp($numwp_client);
+      $infos_demande_article_xprice= new Application_Model_DbTable_DemandeArticlexprices();
+      $info_demande_article_xprice = $infos_demande_article_xprice->get
+       //il faut afficher le formulaire avec les champs  fobfr et prix cif
+        //le commentaire du tc
+        //la possibilité de mettre un commentaire
+        //
+        
     }
 
     public function deleteAction() {
         // action body
     }
 
-    public function validateAction() {
+    public function validateSMCAction() {
         // action body
     }
 
