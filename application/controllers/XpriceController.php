@@ -226,7 +226,7 @@ class XpriceController extends Zend_Controller_Action {
       $infos_client = new Application_Model_DbTable_Clients();
       $info_client = $infos_client->getClientnumwp($numwp_client);
       $infos_demande_article_xprice= new Application_Model_DbTable_DemandeArticlexprices();
-      $info_demande_article_xprice = $infos_demande_article_xprice->get
+      $info_demande_article_xprice = $infos_demande_article_xprice->get;
        //il faut afficher le formulaire avec les champs  fobfr et prix cif
         //le commentaire du tc
         //la possibilité de mettre un commentaire
