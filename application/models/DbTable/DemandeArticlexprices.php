@@ -24,6 +24,15 @@ class Application_Model_DbTable_DemandeArticlexprices extends Zend_Db_Table_Abst
         $this->insert($data);
         return $this;
     }
+public function getDemandeArticlexprice($numwp){
+    $numwp = "$numwp";
+        $rows = $this->fetchAll("num_workplace_demande_xprice = '{$numwp}'");
+        if (!$rows) {
+            return null;
+        } else {
+            return $rows->toArray();
+        }
+    }
 
 }
 

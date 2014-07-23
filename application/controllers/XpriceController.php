@@ -222,11 +222,15 @@ class XpriceController extends Zend_Controller_Action {
        echo '<pre>',var_export($info_demande_xprice),'</pre>';
       var_dump( $info_demande_xprice['id_user']);
       $infos_user=new Application_Model_DbTable_Users();
-      $info_user = $infos_user->getUser($id_user);
+      $info_user = $infos_user->getUserDemande($info_demande_xprice['id_user']);
+      echo '<pre>',var_export($info_user),'</pre>';
       $infos_client = new Application_Model_DbTable_Clients();
-      $info_client = $infos_client->getClientnumwp($numwp_client);
+      $info_client = $infos_client->getClientnumwp($info_demande_xprice['numwp_client']);
+      echo '<pre>',var_export($info_client),'</pre>';
       $infos_demande_article_xprice= new Application_Model_DbTable_DemandeArticlexprices();
-      $info_demande_article_xprice = $infos_demande_article_xprice->get;
+     $info_demande_article_xprice = $infos_demande_article_xprice->getDemandeArticlexprice($numwp);
+     
+      echo '<pre>',  var_export($info_demande_article_xprice,true),'</pre>';
        //il faut afficher le formulaire avec les champs  fobfr et prix cif
         //le commentaire du tc
         //la possibilité de mettre un commentaire

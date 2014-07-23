@@ -12,6 +12,14 @@ class Application_Model_DbTable_Users extends Zend_Db_Table_Abstract {
         }
         return $row->toArray();
     }
+    public function getUserDemande($id_user) {
+        $id_user = (int)$id_user;
+        $row = $this->fetchRow("id_user = ".$id_user);
+        if (!$row) {
+            throw new Exception("could not find row $id_user");
+        }
+        return $row->toArray();
+    }
     public function getMovexUser($numwp_user) {
        // $query = "select * from users where numwp_user = $numwp_user";
         $numwp_user = "$numwp_user";
