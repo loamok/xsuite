@@ -1,0 +1,85 @@
+-- phpMyAdmin SQL Dump
+-- version 3.4.10.1deb1
+-- http://www.phpmyadmin.net
+--
+-- Client: localhost
+-- Généré le : Jeu 24 Juillet 2014 à 17:09
+-- Version du serveur: 5.5.38
+-- Version de PHP: 5.3.10-1ubuntu3.13
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Base de données: `MVXCDTA`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `MCHEAD`
+--
+
+DROP TABLE IF EXISTS `MCHEAD`;
+CREATE TABLE IF NOT EXISTS `MCHEAD` (
+  `KOPCTP` int(11) NOT NULL,
+  `KOPCDT` varchar(15) NOT NULL,
+  `KOCSU3` varchar(30) NOT NULL,
+  `KOITNO` varchar(8) NOT NULL,
+  KEY `KOITNO` (`KOITNO`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Contenu de la table `MCHEAD`
+--
+
+INSERT INTO `MCHEAD` (`KOPCTP`, `KOPCDT`, `KOCSU3`, `KOITNO`) VALUES
+(3, '20140322', '11.00000', '00028125'),
+(3, '20130629', '11.050000', '00028125'),
+(3, '20130324', '11.63000', '00028125'),
+(3, '20121222', '11.640000', '00028125'),
+(3, '20140322', '24.06000', '00028169'),
+(3, '20130629', '24.18', '00028169'),
+(3, '20130624', '24.18000', '00028169'),
+(3, '20130622', '24.180000', '00028169'),
+(3, '20130624', '43.49000', '00028285'),
+(3, '20130622', '43.49000', '00028285'),
+(3, '20140322', '43.27000', '00028285'),
+(3, '20130629', '43.49000', '00028285');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `OCUSMA`
+--
+
+DROP TABLE IF EXISTS `OCUSMA`;
+CREATE TABLE IF NOT EXISTS `OCUSMA` (
+  `OKCUNO` varchar(10) NOT NULL,
+  `OKCUNM` varchar(80) NOT NULL,
+  `OKCUCL` varchar(3) NOT NULL,
+  `OKACGR` varchar(4) NOT NULL,
+  `OKCFC7` varchar(80) NOT NULL,
+  `OKCUA1` varchar(80) NOT NULL,
+  `OKCUA2` varchar(80) NOT NULL,
+  `OKCUA3` varchar(80) NOT NULL,
+  `OKCUA4` varchar(80) NOT NULL,
+  `OKPHNO` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Contenu de la table `OCUSMA`
+--
+
+INSERT INTO `OCUSMA` (`OKCUNO`, `OKCUNM`, `OKCUCL`, `OKACGR`, `OKCFC7`, `OKCUA1`, `OKCUA2`, `OKCUA3`, `OKCUA4`, `OKPHNO`) VALUES
+('I01277', 'GIRBAU ROBOTICS     ', 'CA3', 'IS06', '0', '.     ', 'ZI ECHANGEUR AIX NORD', '    ', '73100 AIX LES BAINS', '04 79 34 80 80');
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -4,8 +4,9 @@ class XpriceController extends Zend_Controller_Action {
 
 //    public $dsn="DRIVER=Client Acess ODBC Driver(32-bit);UID=EU65535;PWD=CCS65535;SYSTEM=10.105.80.32;DBQ=CVXCDTA";
     public $dsn = "DRIVER={MySQL};Server=127.0.0.1;Database=CVXCDTA;UID=EU65535;PWD=CCS65535;";
+    public $dsn2 = "DRIVER={MySQL};Server=127.0.0.1;Database=MVXCDTA;UID=root;PWD=geek;";
     public $odbc_conn = null;
-    protected $_auth = null;
+    public $odbc_conn2 = null;
 
     public function init() {
         $this->odbc_conn = odbc_connect($this->dsn, "", "");
@@ -14,6 +15,12 @@ class XpriceController extends Zend_Controller_Action {
         }
         $this->_auth = Zend_Auth::getInstance();
         $this->view->messages = $this->_helper->flashMessenger->getMessages();
+        
+        $this->odbc_conn2 = odbc_connect($this->dsn2,"","");
+        if(!$this->odbc_conn2){
+            echo "pas d'accès à la base de données MVXCDTA";
+        }
+        
     }
 
     public function indexAction() {
@@ -229,7 +236,6 @@ class XpriceController extends Zend_Controller_Action {
       echo '<pre>',var_export($info_client),'</pre>';
       $infos_demande_article_xprice= new Application_Model_DbTable_DemandeArticlexprices();
      $info_demande_article_xprice = $infos_demande_article_xprice->getDemandeArticlexprice($numwp);
-     
       echo '<pre>',  var_export($info_demande_article_xprice,true),'</pre>';
        //il faut afficher le formulaire avec les champs  fobfr et prix cif
         //le commentaire du tc
@@ -254,22 +260,6 @@ class XpriceController extends Zend_Controller_Action {
         // action body
     }
 
-    public function confirmcreateAction() {
-        // au moment de la confirmation d'insertion dans la base de la demande Xprice
-        //  envoyer un mail à chef de vente pour validation
-        //  et à prixfob pour qu'il remplisse  les prix
-        $form = new Application_Form_Confirmcreate();
-        // $form->submit->setLabel('Creer');
-        $this->view->form = $form;
-    }
-
-    public function confirmvalidAction() {
-        // action body
-    }
-
-    public function confirmupdateAction() {
-        // action body
-    }
 
 }
 
