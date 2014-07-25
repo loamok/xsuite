@@ -237,6 +237,24 @@ class XpriceController extends Zend_Controller_Action {
       $infos_demande_article_xprice= new Application_Model_DbTable_DemandeArticlexprices();
      $info_demande_article_xprice = $infos_demande_article_xprice->getDemandeArticlexprice($numwp);
       echo '<pre>',  var_export($info_demande_article_xprice,true),'</pre>';
+      foreach ($info_demande_article_xprice as $value) {
+          
+     
+     $query= "select *"
+            . "from "
+           . "MCHEAD "
+     . "WHERE MCHEAD.KOITNO = '{$value['code_article']}'";
+     $infos_prixfobfr = odbc_exec($this->odbc_conn2,$query);
+     while($info_prixfobfr =  odbc_fetch_array($infos_prixfobfr)){
+         $date1 = substr($info_prixfobfr['KOPCDT'],0,-4);
+         $date2 = substr($info_prixfobfr['KOPCDT'],4,-2);
+         $date3 = substr($info_prixfobfr['KOPCDT'],6,2);
+         
+         $date = implode('-',array($date1,$date2,$date3));
+     echo  '<pre>',var_export($info_prixfobfr,true),'<pre>';
+     echo '<pre>',var_export($date,true),'</pre>';
+     }
+      }
        //il faut afficher le formulaire avec les champs  fobfr et prix cif
         //le commentaire du tc
         //la possibilité de mettre un commentaire
