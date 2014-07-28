@@ -108,6 +108,12 @@ h1{
     text-align: center;
 }
 
+h2{
+    font-weight:bold;
+    font-size:34px;
+    color:#A0A1A1;
+    text-align:center;
+}
 h3{
     font-weight: bold;
     font-size: 20px;
