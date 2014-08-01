@@ -341,3 +341,28 @@ fieldset legend{
     padding-top: 10px;
     margin-top: 10px;
 }
+#form_prixfob{
+    
+    width: 700px;
+    float:left;
+    margin-bottom:25px;
+    margin-left:25px;
+}
+
+#commentaire_fobfr-label{
+    
+    font-weight: bold;
+    font-style: italic;
+    font-size: 20px;
+    font-family: verdana;
+}
+span {
+    border-radius: 5px;
+    border-color:grey;
+    border-style:solid;
+    border-width: 1px;
+    width: 700px;
+    float:left;
+    margin-bottom:25px;
+    margin-left:25px;
+}

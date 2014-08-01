@@ -130,6 +130,17 @@ class XpriceController extends Zend_Controller_Action {
             while ($resultat[] = odbc_fetch_array($resultats)) {
                 $this->view->resultat = $resultat;
             }
+            /* aller chercher prix fob prix cif sur la base MVCDXTA en utilisant les tables KOPCDT(date) KOITNO ( code article) et KO ( prix cif)
+             * 
+             */foreach($this->view->resultat as $itnoarticle){
+             $query3="select MCHEAD.KOPCDT, MCHEAD.KOCSU3, MCHEAD.KOITNO from MCHEAD where MCHEAD.KOITNO = {$itnoarticle['OBITNO']}";
+            
+             $itno[]=$itnoarticle['OBITNO'];
+             }
+             echo var_dump($itno);  
+             while ($itno){
+                 
+             }exit();
             /*
              * à partir du code client de la table ooline on va chercher dans la table ocusma
              * les informations concernant le client pour pouvoir les afficher dans la vue phtml
@@ -227,12 +238,13 @@ class XpriceController extends Zend_Controller_Action {
        $numwp = $this->getRequest()->getParam('numwp', null);
        //var_dump($numwp);
        $this->view->numwp = $numwp;
+        $form = new Application_Form_Prixfobfr();
        /*
         * on va rechercher les informations concernant la demande _xprice
         */
        $infos_demande_xprice= new Application_Model_DbTable_Xprices();
        $info_demande_xprice = $infos_demande_xprice->getNumwp($numwp);
-       //echo '<pre>',var_export($info_demande_xprice),'</pre>';
+       echo '<pre>',var_export($info_demande_xprice),'</pre>';
      // var_dump( $info_demande_xprice['id_user']);
       $this->view->info_demande_xprice= $info_demande_xprice;
       $infos_user=new Application_Model_DbTable_Users();
@@ -259,19 +271,16 @@ class XpriceController extends Zend_Controller_Action {
          $date1 = substr($info_prixfobfr['KOPCDT'],0,-4);
          $date2 = substr($info_prixfobfr['KOPCDT'],4,-2);
          $date3 = substr($info_prixfobfr['KOPCDT'],6,2);
-         
          $date = implode('-',array($date1,$date2,$date3));
-         //var_dump($datetime);
-     echo  '<pre>',var_export($info_prixfobfr,true),'<pre>';
-     //echo '<pre>',var_export($date,true),'</pre>';
-     $this->view->info_prixfobfr=$info_prixfobfr;
+         $this->view->info_prixfobfr=$info_prixfobfr;
      }
+     
       }
        //il faut afficher le formulaire avec les champs  fobfr et prix cif
         //le commentaire du tc
         //la possibilité de mettre un commentaire
         //
-        
+         $this->view->form = $form;
     }
 
     public function deleteAction() {

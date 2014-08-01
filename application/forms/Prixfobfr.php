@@ -5,7 +5,8 @@ class Application_Form_Prixfobfr extends Zend_Form
 
     public function init()
     {
-          /*
+        $this->setMethod('post');  
+        /*
          * fieldset commentaire
          */
         
@@ -24,17 +25,6 @@ class Application_Form_Prixfobfr extends Zend_Form
          * ajout des élements au form
          */
         $this->addElement($commentaire_fobfr);
-        
-        
-        $this->addDisplayGroup(array("commentaire_fobfr"), 'commentairefobfr', array('disableLoadDefaultDecorators' => true));
-        
-        $this->setDisplayGroupDecorators(array(
-            'FormElements',
-            'Fieldset'
-        ));
-        
-        $this->getDisplayGroup('commentairefobfr')
-                ->setLegend("Commentaires Fobfr");
         $this->addElement($submit);
         
     }
