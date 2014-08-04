@@ -135,12 +135,12 @@ class XpriceController extends Zend_Controller_Action {
              */foreach($this->view->resultat as $itnoarticle){
              $query3="select MCHEAD.KOPCDT, MCHEAD.KOCSU3, MCHEAD.KOITNO from MCHEAD where MCHEAD.KOITNO = {$itnoarticle['OBITNO']}";
             
-             $itno[]=$itnoarticle['OBITNO'];
-             }
-             echo var_dump($itno);  
-             while ($itno){
-                 
-             }exit();
+             
+                 $resultats3 = odbc_Exec($this->odbc_conn2,$query3);
+                 $prixciffob[]= odbc_fetch_object($resultats3);
+             }//echo "<pre>",var_export($prixciffob),"</pre>"; //exit();
+             $this->view->prixciffob=$prixciffob;
+             
             /*
              * à partir du code client de la table ooline on va chercher dans la table ocusma
              * les informations concernant le client pour pouvoir les afficher dans la vue phtml
@@ -198,6 +198,12 @@ class XpriceController extends Zend_Controller_Action {
                     }
                     $demande_xprice = $demandes_xprice->createDemandeArticlexprice($resultarticle['OBNEPR'], $resultarticle['OBSAPR'], $resultarticle['OBORQT'], round($resultarticle['OBNEPR'] * 100 / $resultarticle['OBSAPR'], 2), $infos_offre->date_offre, null, null, null, null, null, $trackingNumber, $resultarticle['OBITNO'], $resultarticle['OBITDS'], $numwp);
                 }
+                //echo "<pre>",var_export($prixciffob,true),"</pre>";
+               foreach ($prixciffob as $value){
+                   echo"<pre>",var_export($value->KOCSU3,true),"</pre>";
+                    $insertprix=new Application_Model_DbTable_DemandeArticlexprices();
+                    $inserprix = $insertprix->InserPrixFob($value->KOCSU3,$value->KOITNO, $numwp);
+              }exit();
                 /*
                  * ici, envoi des mails 
                  */
