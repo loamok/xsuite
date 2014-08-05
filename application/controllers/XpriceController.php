@@ -7,7 +7,8 @@ class XpriceController extends Zend_Controller_Action {
     public $dsn2 = "DRIVER={MySQL};Server=127.0.0.1;Database=MVXCDTA;UID=root;PWD=geek;";
     public $odbc_conn = null;
     public $odbc_conn2 = null;
-   //  public $odbc_conn3= null;
+
+    //  public $odbc_conn3= null;
 
     public function init() {
         $this->odbc_conn = odbc_connect($this->dsn, "", "");
@@ -16,16 +17,15 @@ class XpriceController extends Zend_Controller_Action {
         }
         $this->_auth = Zend_Auth::getInstance();
         $this->view->messages = $this->_helper->flashMessenger->getMessages();
-        
-        $this->odbc_conn2 = odbc_connect($this->dsn2,"","");
-        if(!$this->odbc_conn2){
+
+        $this->odbc_conn2 = odbc_connect($this->dsn2, "", "");
+        if (!$this->odbc_conn2) {
             echo "pas d'accès à la base de données MVXCDTA";
         }
         // $this->odbc_conn3 = odbc_connect($this->dsn3,"","");
         //if(!$this->odbc_conn3){
         //    print odbc_errormsg();
-       //}
-        
+        //}
     }
 
     public function indexAction() {
@@ -35,7 +35,7 @@ class XpriceController extends Zend_Controller_Action {
     public function numwpAction() {
         $numwp = $this->getRequest()->getParam('numwp', null);
         $form = new Application_Form_Numwp();
-        if(!is_null($numwp)) {
+        if (!is_null($numwp)) {
             $form->populate(array("num_offre_worplace" => $numwp));
         }
         if ($this->getRequest()->isPost()) {
@@ -64,7 +64,7 @@ class XpriceController extends Zend_Controller_Action {
         $numwp = $this->getRequest()->getParam('numwp', null);
         $demandes_xprice = new Application_Model_DbTable_Xprices();
         $demandeXprice = $demandes_xprice->getNumwp($numwp);
-        if(!is_null($demandeXprice)){
+        if (!is_null($demandeXprice)) {
             $redirector = $this->_helper->getHelper('Redirector');
             $flashMessenger = $this->_helper->getHelper('FlashMessenger');
             $message = "Cette offre a déjà été créée.";
@@ -131,16 +131,16 @@ class XpriceController extends Zend_Controller_Action {
                 $this->view->resultat = $resultat;
             }
             /* aller chercher prix fob prix cif sur la base MVCDXTA en utilisant les tables KOPCDT(date) KOITNO ( code article) et KO ( prix cif)
-             * 
-             */foreach($this->view->resultat as $itnoarticle){
-             $query3="select MCHEAD.KOPCDT, MCHEAD.KOCSU3, MCHEAD.KOITNO from MCHEAD where MCHEAD.KOITNO = {$itnoarticle['OBITNO']}";
-            
-             
-                 $resultats3 = odbc_Exec($this->odbc_conn2,$query3);
-                 $prixciffob[]= odbc_fetch_object($resultats3);
-             }//echo "<pre>",var_export($prixciffob),"</pre>"; //exit();
-             $this->view->prixciffob=$prixciffob;
-             
+             *
+             */foreach ($this->view->resultat as $itnoarticle) {
+                $query3 = "select MCHEAD.KOPCDT, MCHEAD.KOCSU3, MCHEAD.KOITNO from MCHEAD where MCHEAD.KOITNO = {$itnoarticle['OBITNO']}";
+
+
+                $resultats3 = odbc_Exec($this->odbc_conn2, $query3);
+                $prixciffob[] = odbc_fetch_object($resultats3);
+            }//echo "<pre>",var_export($prixciffob),"</pre>"; //exit();
+            $this->view->prixciffob = $prixciffob;
+
             /*
              * à partir du code client de la table ooline on va chercher dans la table ocusma
              * les informations concernant le client pour pouvoir les afficher dans la vue phtml
@@ -199,16 +199,15 @@ class XpriceController extends Zend_Controller_Action {
                     $demande_xprice = $demandes_xprice->createDemandeArticlexprice($resultarticle['OBNEPR'], $resultarticle['OBSAPR'], $resultarticle['OBORQT'], round($resultarticle['OBNEPR'] * 100 / $resultarticle['OBSAPR'], 2), $infos_offre->date_offre, null, null, null, null, null, $trackingNumber, $resultarticle['OBITNO'], $resultarticle['OBITDS'], $numwp);
                 }
                 //echo "<pre>",var_export($prixciffob,true),"</pre>";
-               foreach ($prixciffob as $value){
-                   echo"<pre>",var_export($value->KOCSU3,true),"</pre>";
-                    $insertprix=new Application_Model_DbTable_DemandeArticlexprices();
-                    $inserprix = $insertprix->InserPrixFob($value->KOCSU3,$value->KOITNO, $numwp);
-              }exit();
+                foreach ($prixciffob as $value) {
+                    $insertprix = new Application_Model_DbTable_DemandeArticlexprices();
+                    $inserprix = $insertprix->InserPrixFob($value->KOCSU3, $value->KOITNO, $numwp);
+                }
                 /*
-                 * ici, envoi des mails 
+                 * ici, envoi des mails
                  */
                 $emailVars = Zend_Registry::get('emailVars');
-                $fobfrMail =  $emailVars->listes->fobfr;
+                $fobfrMail = $emailVars->listes->fobfr;
                 $url = "http://{$_SERVER['SERVER_NAME']}/xprice/prixfobfr/numwp/{$numwp}";
                 $corpsMail = "Bonjour,\n"
                         . "\n"
@@ -241,48 +240,47 @@ class XpriceController extends Zend_Controller_Action {
     }
 
     public function prixfobfrAction() {
-       $numwp = $this->getRequest()->getParam('numwp', null);
-       //var_dump($numwp);
-       $this->view->numwp = $numwp;
+        $numwp = $this->getRequest()->getParam('numwp', null);
+        //var_dump($numwp);
+        $this->view->numwp = $numwp;
         $form = new Application_Form_Prixfobfr();
-       /*
-        * on va rechercher les informations concernant la demande _xprice
-        */
-       $infos_demande_xprice= new Application_Model_DbTable_Xprices();
-       $info_demande_xprice = $infos_demande_xprice->getNumwp($numwp);
-       echo '<pre>',var_export($info_demande_xprice),'</pre>';
-     // var_dump( $info_demande_xprice['id_user']);
-      $this->view->info_demande_xprice= $info_demande_xprice;
-      $infos_user=new Application_Model_DbTable_Users();
-      $info_user = $infos_user->getUserDemande($info_demande_xprice['id_user']);
-     // echo '<pre>',var_export($info_user),'</pre>';
-      $this->view->info_user=$info_user;
-      $infos_client = new Application_Model_DbTable_Clients();
-      $info_client = $infos_client->getClientnumwp($info_demande_xprice['numwp_client']);
-      //echo '<pre>',var_export($info_client),'</pre>';
-      $this->view->info_client=$info_client;
-      $infos_demande_article_xprice= new Application_Model_DbTable_DemandeArticlexprices();
-     $info_demande_article_xprice = $infos_demande_article_xprice->getDemandeArticlexprice($numwp);
-      //echo '<pre>',  var_export($info_demande_article_xprice,true),'</pre>';
-      $this->view->info_demande_article_xprice=$info_demande_article_xprice;
-      foreach ($info_demande_article_xprice as $value) {
-          
-     
-     $query= "select *"
-            . "from "
-           . "MCHEAD "
-     . "WHERE MCHEAD.KOITNO = '{$value['code_article']}' order by KOPCDT desc limit 1";
-     $infos_prixfobfr = odbc_exec($this->odbc_conn2,$query);
-     while($info_prixfobfr =  odbc_fetch_array($infos_prixfobfr)){
-         $date1 = substr($info_prixfobfr['KOPCDT'],0,-4);
-         $date2 = substr($info_prixfobfr['KOPCDT'],4,-2);
-         $date3 = substr($info_prixfobfr['KOPCDT'],6,2);
-         $date = implode('-',array($date1,$date2,$date3));
-         $this->view->info_prixfobfr=$info_prixfobfr;
-     }
-     
-      }
-       //il faut afficher le formulaire avec les champs  fobfr et prix cif
+        /*
+         * on va rechercher les informations concernant la demande _xprice
+         */
+        $infos_demande_xprice = new Application_Model_DbTable_Xprices();
+        $info_demande_xprice = $infos_demande_xprice->getNumwp($numwp);
+        echo '<pre>', var_export($info_demande_xprice), '</pre>';
+        // var_dump( $info_demande_xprice['id_user']);
+        $this->view->info_demande_xprice = $info_demande_xprice;
+        $infos_user = new Application_Model_DbTable_Users();
+        $info_user = $infos_user->getUserDemande($info_demande_xprice['id_user']);
+        // echo '<pre>',var_export($info_user),'</pre>';
+        $this->view->info_user = $info_user;
+        $infos_client = new Application_Model_DbTable_Clients();
+        $info_client = $infos_client->getClientnumwp($info_demande_xprice['numwp_client']);
+        //echo '<pre>',var_export($info_client),'</pre>';
+        $this->view->info_client = $info_client;
+        $infos_demande_article_xprice = new Application_Model_DbTable_DemandeArticlexprices();
+        $info_demande_article_xprice = $infos_demande_article_xprice->getDemandeArticlexprice($numwp);
+        //echo '<pre>',  var_export($info_demande_article_xprice,true),'</pre>';
+        $this->view->info_demande_article_xprice = $info_demande_article_xprice;
+        foreach ($info_demande_article_xprice as $value) {
+
+
+            $query = "select *"
+                    . "from "
+                    . "MCHEAD "
+                    . "WHERE MCHEAD.KOITNO = '{$value['code_article']}' order by KOPCDT desc limit 1";
+            $infos_prixfobfr = odbc_exec($this->odbc_conn2, $query);
+            while ($info_prixfobfr = odbc_fetch_array($infos_prixfobfr)) {
+                $date1 = substr($info_prixfobfr['KOPCDT'], 0, -4);
+                $date2 = substr($info_prixfobfr['KOPCDT'], 4, -2);
+                $date3 = substr($info_prixfobfr['KOPCDT'], 6, 2);
+                $date = implode('-', array($date1, $date2, $date3));
+                $this->view->info_prixfobfr = $info_prixfobfr;
+            }
+        }
+        //il faut afficher le formulaire avec les champs  fobfr et prix cif
         //le commentaire du tc
         //la possibilité de mettre un commentaire
         //
@@ -304,7 +302,6 @@ class XpriceController extends Zend_Controller_Action {
     public function listAction() {
         // action body
     }
-
 
 }
 
