@@ -200,9 +200,10 @@ class XpriceController extends Zend_Controller_Action {
                 }
                 //echo "<pre>",var_export($prixciffob,true),"</pre>";
                 foreach ($prixciffob as $value) {
+                    echo"<pre>", var_export($value->KOCSU3, true), "</pre>";
                     $insertprix = new Application_Model_DbTable_DemandeArticlexprices();
                     $inserprix = $insertprix->InserPrixFob($value->KOCSU3, $value->KOITNO, $numwp);
-                }
+                }exit();
                 /*
                  * ici, envoi des mails
                  */
