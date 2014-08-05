@@ -2,7 +2,7 @@
 $this->title = 'Xprice/fobfr';
 $this->headTitle($this->title);
 ?>
-<h2>V&eacute;rification de prix fob prix cif de l'offre n=°<?php echo $this->numwp; ?></h2>
+<h2>V&eacute;rification de prix fob prix cif de l'offre n=°<?php echo $this->info_demande_xprice['tracking_number_demande_xprice'] ?></h2>
 <div id='workplace'>
     <fieldset id="wp">
         <legend>Informations offre</legend>
@@ -74,6 +74,10 @@ $this->headTitle($this->title);
         </table>
     </fieldset>
 </div>
+<fielset id='comm_user'><legend>Commentaire commercial</legend>
+        <span><?php echo $this->info_demande_xprice['commentaire_demande_xprice']?></span>
+    </fielset>
+<form action="#" method="post">
 <div id="demandeArticle">
     <fieldset ><legend>Articles </legend>
         <table id="article">
@@ -94,19 +98,20 @@ $this->headTitle($this->title);
                     <td><?php echo $result['quantite_demande_article'];?></td>
                     <td><?php echo $result['prixwplace_demande_article'];?></td>
                     <td><?php echo $result['prix_demande_article']; ?></td>
-                    <td><?php //echo round($result['']*100/$result[''],2); ?></td>
-                    <td></td>
-                    <td></td>
+                    <td><?php $margedemande= ((($result['prix_demande_article']/$result['quantite_demande_article'])*100)/$result['prixwplace_demande_article']); $margedef=100-$margedemande;echo round($margedef,2)."%"; ?></td>
+                    <td><input id="prixfob" type="text" name="<?php echo 'prixcif_'. $result['code_article'] ?>" value="<?php echo $result['prix_fob_demande_article']; ?>"></td>
+                    <td><input id="prixcif" type="text" name="<?php echo 'prixfob_'.$result['code_article'] ?>" value="<?php echo $result['prix_cif_demande_article']; ?>"></td>
+                    
                 </tr>
             <?php } ?>
         </table>
+        <input type="text" hidden="hidden" value="<?php echo  $this->info_demande_xprice['tracking_number_demande_xprice']; ?>" name="tracking">
     </fieldset>  
 </div>
 <div id='formprixfob'>
-    <fieldset id='form_prixfob'><legend>Commentaires</legend>
-    <fielset id='comm_user'><legend>Commentaire commercial</legend>
-        <span><?php echo $this->info_demande_xprice['commentaire_demande_xprice']?></span>
-    </fielset>
-    <?php echo $this->form; ?>
+    <fieldset id='form_prixfob'><legend>Commentaire Fobfr</legend>
+        <textarea name="commentaire_fobfr" cols="100" rows="20"></textarea>
     </fieldset>
 </div>
+    <input type="submit" value="enregistrer">
+</form>

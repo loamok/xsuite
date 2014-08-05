@@ -200,10 +200,10 @@ class XpriceController extends Zend_Controller_Action {
                 }
                 //echo "<pre>",var_export($prixciffob,true),"</pre>";
                 foreach ($prixciffob as $value) {
-                    echo"<pre>", var_export($value->KOCSU3, true), "</pre>";
+                    //echo"<pre>", var_export($value->KOCSU3, true), "</pre>";
                     $insertprix = new Application_Model_DbTable_DemandeArticlexprices();
                     $inserprix = $insertprix->InserPrixFob($value->KOCSU3, $value->KOITNO, $numwp);
-                }exit();
+                }
                 /*
                  * ici, envoi des mails
                  */
@@ -244,7 +244,6 @@ class XpriceController extends Zend_Controller_Action {
         $numwp = $this->getRequest()->getParam('numwp', null);
         //var_dump($numwp);
         $this->view->numwp = $numwp;
-        $form = new Application_Form_Prixfobfr();
         /*
          * on va rechercher les informations concernant la demande _xprice
          */
@@ -280,12 +279,19 @@ class XpriceController extends Zend_Controller_Action {
                 $date = implode('-', array($date1, $date2, $date3));
                 $this->view->info_prixfobfr = $info_prixfobfr;
             }
+            
+            
+             
+              if ($this->getRequest()->isPost()) {
+             $formData = $this->getRequest()->getPost();
+             
+              echo "<pre>", var_export($formData,true),"</pre>";}
         }
         //il faut afficher le formulaire avec les champs  fobfr et prix cif
         //le commentaire du tc
         //la possibilité de mettre un commentaire
         //
-         $this->view->form = $form;
+        
     }
 
     public function deleteAction() {
@@ -297,7 +303,7 @@ class XpriceController extends Zend_Controller_Action {
     }
 
     public function updateAction() {
-        // action body
+        
     }
 
     public function listAction() {

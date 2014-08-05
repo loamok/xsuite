@@ -366,3 +366,6 @@ span {
     margin-bottom:25px;
     margin-left:25px;
 }
+#prixcif, #prixfob {
+    width: 60px !important;
+}
