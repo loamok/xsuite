@@ -280,18 +280,20 @@ class XpriceController extends Zend_Controller_Action {
                 $this->view->info_prixfobfr = $info_prixfobfr;
             }
             
-            
-             
-              if ($this->getRequest()->isPost()) {
+                 if ($this->getRequest()->isPost()) {
              $formData = $this->getRequest()->getPost();
+             echo "<pre>", var_export($formData,true),"</pre>";      
+             foreach($formData as $key=>$value){
+             }
+              } 
              
-              echo "<pre>", var_export($formData,true),"</pre>";}
         }
         //il faut afficher le formulaire avec les champs  fobfr et prix cif
         //le commentaire du tc
         //la possibilité de mettre un commentaire
         //
-        
+             
+           
     }
 
     public function deleteAction() {
