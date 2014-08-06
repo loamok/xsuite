@@ -93,7 +93,7 @@ $this->headTitle($this->title);
             </tr>
             <?php foreach ($this->info_demande_article_xprice as $result) { ?>
                 <tr>
-                    <td><input value="<?php echo $result['code_article'] ?>"  name="<?php for($i=1;;$i++) { if($i > count($this)){ break;} echo 'code_article_'.$i;}; ?>"></td>
+                    <td><input readonly="readonly" value="<?php echo $result['code_article'] ?>"  name="<?php echo 'code_article'; ?>"></td>
                     <td><?php echo $result['reference_article'];?></td>
                     <td><?php echo $result['quantite_demande_article'];?></td>
                     <td><?php echo $result['prixwplace_demande_article'];?></td>
