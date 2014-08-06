@@ -3,8 +3,8 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le : Ven 11 Juillet 2014 à 07:34
--- Version du serveur: 5.5.37
+-- Généré le : Mer 06 Août 2014 à 09:09
+-- Version du serveur: 5.5.38
 -- Version de PHP: 5.3.10-1ubuntu3.13
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
@@ -17,8 +17,144 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
+-- Base de données: `CVXCDTA`
+--
+DROP DATABASE `CVXCDTA`;
+CREATE DATABASE `CVXCDTA` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `CVXCDTA`;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `OCUSMA`
+--
+
+DROP TABLE IF EXISTS `OCUSMA`;
+CREATE TABLE IF NOT EXISTS `OCUSMA` (
+  `OKCUNO` varchar(10) NOT NULL,
+  `OKCUNM` varchar(80) NOT NULL,
+  `OKCUCL` varchar(3) NOT NULL,
+  `OKACGR` varchar(4) NOT NULL,
+  `OKCFC7` varchar(80) NOT NULL,
+  `OKCUA1` varchar(80) NOT NULL,
+  `OKCUA2` varchar(80) NOT NULL,
+  `OKCUA3` varchar(80) NOT NULL,
+  `OKCUA4` varchar(80) NOT NULL,
+  `OKPHNO` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Contenu de la table `OCUSMA`
+--
+
+INSERT INTO `OCUSMA` (`OKCUNO`, `OKCUNM`, `OKCUCL`, `OKACGR`, `OKCFC7`, `OKCUA1`, `OKCUA2`, `OKCUA3`, `OKCUA4`, `OKPHNO`) VALUES
+('I01277', 'GIRBAU ROBOTICS     ', 'CA3', 'IS06', '0', '.     ', 'ZI ECHANGEUR AIX NORD', '    ', '73100 AIX LES BAINS', '04 79 34 80 80');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `OOLINE`
+--
+
+DROP TABLE IF EXISTS `OOLINE`;
+CREATE TABLE IF NOT EXISTS `OOLINE` (
+  `OBORNO` varchar(15) NOT NULL,
+  `OBCUNO` varchar(10) NOT NULL,
+  `OBITNO` varchar(15) NOT NULL,
+  `OBITDS` varchar(15) NOT NULL,
+  `OBORQT` varchar(15) NOT NULL,
+  `OBLNA2` varchar(15) NOT NULL,
+  `OBLNAM` varchar(15) NOT NULL,
+  `OBNEPR` varchar(15) NOT NULL,
+  `OBSAPR` varchar(10) NOT NULL,
+  `OBELNO` date NOT NULL,
+  `OBRGDT` date NOT NULL,
+  `OBLMDT` date NOT NULL,
+  `OBSMCD` varchar(4) NOT NULL,
+  `OBDIVI` varchar(3) NOT NULL DEFAULT 'FR0',
+  `OBCONO` int(3) NOT NULL DEFAULT '100'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Contenu de la table `OOLINE`
+--
+
+INSERT INTO `OOLINE` (`OBORNO`, `OBCUNO`, `OBITNO`, `OBITDS`, `OBORQT`, `OBLNA2`, `OBLNAM`, `OBNEPR`, `OBSAPR`, `OBELNO`, `OBRGDT`, `OBLMDT`, `OBSMCD`, `OBDIVI`, `OBCONO`) VALUES
+('0090636993', 'I01277', '00028125', 'TU0425R-100  ', '20.000000', '212.40', '212.40', '10.620000', '42.480000', '2014-06-12', '2014-06-10', '2014-06-10', 'IB06', 'FR0', 100),
+('0090636993', 'I01277', '00028169', 'TU0604BU-100', '20.000000', '465.80', '465.80', '23.290000', '93.170000', '2014-06-12', '2014-06-10', '2014-06-10', 'IB06', 'FR0', 100),
+('0090636993', 'I01277', '00028285', 'TU0805R-100', '5.000000', '209.05', '209.05', '41.810000', '167.260000', '2014-06-12', '2014-06-10', '2014-06-10', 'IB06', 'FR0', 100);
+--
+-- Base de données: `MVXCDTA`
+--
+DROP DATABASE `MVXCDTA`;
+CREATE DATABASE `MVXCDTA` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `MVXCDTA`;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `MCHEAD`
+--
+
+DROP TABLE IF EXISTS `MCHEAD`;
+CREATE TABLE IF NOT EXISTS `MCHEAD` (
+  `KOPCTP` int(11) NOT NULL,
+  `KOPCDT` varchar(15) NOT NULL,
+  `KOCSU3` varchar(30) NOT NULL,
+  `KOITNO` varchar(8) NOT NULL,
+  KEY `KOITNO` (`KOITNO`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Contenu de la table `MCHEAD`
+--
+
+INSERT INTO `MCHEAD` (`KOPCTP`, `KOPCDT`, `KOCSU3`, `KOITNO`) VALUES
+(3, '20140322', '11.00000', '00028125'),
+(3, '20130629', '11.050000', '00028125'),
+(3, '20130324', '11.63000', '00028125'),
+(3, '20121222', '11.640000', '00028125'),
+(3, '20140322', '24.06000', '00028169'),
+(3, '20130629', '24.18', '00028169'),
+(3, '20130624', '24.18000', '00028169'),
+(3, '20130622', '24.180000', '00028169'),
+(3, '20130624', '43.49000', '00028285'),
+(3, '20130622', '43.49000', '00028285'),
+(3, '20140322', '43.27000', '00028285'),
+(3, '20130629', '43.49000', '00028285');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `OCUSMA`
+--
+
+DROP TABLE IF EXISTS `OCUSMA`;
+CREATE TABLE IF NOT EXISTS `OCUSMA` (
+  `OKCUNO` varchar(10) NOT NULL,
+  `OKCUNM` varchar(80) NOT NULL,
+  `OKCUCL` varchar(3) NOT NULL,
+  `OKACGR` varchar(4) NOT NULL,
+  `OKCFC7` varchar(80) NOT NULL,
+  `OKCUA1` varchar(80) NOT NULL,
+  `OKCUA2` varchar(80) NOT NULL,
+  `OKCUA3` varchar(80) NOT NULL,
+  `OKCUA4` varchar(80) NOT NULL,
+  `OKPHNO` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Contenu de la table `OCUSMA`
+--
+
+INSERT INTO `OCUSMA` (`OKCUNO`, `OKCUNM`, `OKCUCL`, `OKACGR`, `OKCFC7`, `OKCUA1`, `OKCUA2`, `OKCUA3`, `OKCUA4`, `OKPHNO`) VALUES
+('I01277', 'GIRBAU ROBOTICS     ', 'CA3', 'IS06', '0', '.     ', 'ZI ECHANGEUR AIX NORD', '    ', '73100 AIX LES BAINS', '04 79 34 80 80');
+--
 -- Base de données: `xsuite-dev`
 --
+DROP DATABASE `xsuite-dev`;
+CREATE DATABASE `xsuite-dev` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `xsuite-dev`;
 
 -- --------------------------------------------------------
 
@@ -26,13 +162,26 @@ SET time_zone = "+00:00";
 -- Structure de la table `articles`
 --
 
+DROP TABLE IF EXISTS `articles`;
 CREATE TABLE IF NOT EXISTS `articles` (
   `id_article` int(11) NOT NULL AUTO_INCREMENT,
   `reference_article` varchar(80) NOT NULL,
-  `code_article` varchar(15) NOT NULL,
+  `code_article` varchar(8) NOT NULL,
   `description_article` varchar(80) DEFAULT NULL,
   PRIMARY KEY (`id_article`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+
+--
+-- Contenu de la table `articles`
+--
+
+INSERT INTO `articles` (`id_article`, `reference_article`, `code_article`, `description_article`) VALUES
+(1, 'TU0425R-100  ', '28125', NULL),
+(2, 'TU0604BU-100', '28169', NULL),
+(3, 'TU0805R-100', '28285', NULL),
+(4, 'TU0425R-100 ', '00028125', NULL),
+(5, 'TU0604BU-100', '00028169', NULL),
+(6, 'TU0805R-100', '00028285', NULL);
 
 -- --------------------------------------------------------
 
@@ -40,15 +189,23 @@ CREATE TABLE IF NOT EXISTS `articles` (
 -- Structure de la table `clients`
 --
 
+DROP TABLE IF EXISTS `clients`;
 CREATE TABLE IF NOT EXISTS `clients` (
   `id_client` int(11) NOT NULL AUTO_INCREMENT,
   `nom_client` varchar(80) NOT NULL,
   `numwp_client` varchar(15) NOT NULL,
-  `email_client` varchar(30) NOT NULL,
+  `adresse_client` varchar(100) NOT NULL,
   `id_industry` varchar(30) NOT NULL,
   PRIMARY KEY (`id_client`),
   KEY `id_industry` (`id_industry`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Contenu de la table `clients`
+--
+
+INSERT INTO `clients` (`id_client`, `nom_client`, `numwp_client`, `adresse_client`, `id_industry`) VALUES
+(1, 'GIRBAU ROBOTICS     ', 'I01277', '.     ZI ECHANGEUR AIX NORD    73100 AIX LES BAINS', 'CA3');
 
 -- --------------------------------------------------------
 
@@ -56,24 +213,37 @@ CREATE TABLE IF NOT EXISTS `clients` (
 -- Structure de la table `demande_article_xprices`
 --
 
+DROP TABLE IF EXISTS `demande_article_xprices`;
 CREATE TABLE IF NOT EXISTS `demande_article_xprices` (
-  `id_demande_article` int(11) NOT NULL AUTO_INCREMENT COMMENT 'identifiant unique auto incrementé d''un article dela demande d''offre',
-  `prix_demande_article` varchar(20) NOT NULL COMMENT 'prix de l''article demandé',
-  `quantite_demande_article` int(11) NOT NULL COMMENT 'quantité de l''article demandé',
-  `remise_demande_article` varchar(20) DEFAULT NULL COMMENT 'remise demandé par rapport au prix workplace',
-  `date_demande_xprice` date NOT NULL COMMENT 'date de la demande de l''offre workplace',
-  `id_demande_xprice` int(11) NOT NULL COMMENT 'identifiant unique de la demande xprice',
-  `prix_accorde_demande_article` varchar(20) DEFAULT NULL COMMENT 'prix accordé pour l''article demandéé',
-  `remise_accorde_demande_article` varchar(20) DEFAULT NULL COMMENT 'remise accordé pour l''article demandé',
-  `prix_fob_demande_article` varchar(20) DEFAULT NULL COMMENT 'prix fobfr de l''article ',
-  `prix_cif_demande_article` varchar(20) DEFAULT NULL COMMENT 'prix cif de l''article',
-  `marge_demande_article` varchar(20) DEFAULT NULL COMMENT 'marge pour l''article demandé',
-  `tracking_number_demande_xprice` varchar(50) NOT NULL COMMENT 'numéro unique de l''offre dans l''application Xsuite',
-  `id_article` int(11) NOT NULL,
+  `id_demande_article` int(11) NOT NULL AUTO_INCREMENT,
+  `prixwplace_demande_article` decimal(10,4) NOT NULL,
+  `prix_demande_article` float NOT NULL,
+  `quantite_demande_article` int(11) NOT NULL,
+  `remise_demande_article` float DEFAULT NULL,
+  `date_demande_xprice` date NOT NULL,
+  `prix_accorde_demande_article` float DEFAULT NULL,
+  `remise_accorde_demande_article` float DEFAULT NULL,
+  `prix_fob_demande_article` varchar(20) DEFAULT NULL,
+  `prix_cif_demande_article` varchar(20) DEFAULT NULL,
+  `marge_demande_article` float DEFAULT NULL,
+  `tracking_number_demande_xprice` varchar(50) NOT NULL,
+  `code_article` varchar(15) NOT NULL,
+  `reference_article` varchar(80) NOT NULL,
+  `num_workplace_demande_xprice` varchar(35) NOT NULL,
   PRIMARY KEY (`id_demande_article`),
-  KEY `date_demande_xprice` (`date_demande_xprice`,`id_demande_xprice`,`tracking_number_demande_xprice`),
-  KEY `id_article` (`id_article`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  KEY `tracking_number_demande_xprice` (`tracking_number_demande_xprice`),
+  KEY `code_article` (`code_article`,`reference_article`),
+  KEY `num_workplace_demande_xprice` (`num_workplace_demande_xprice`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Contenu de la table `demande_article_xprices`
+--
+
+INSERT INTO `demande_article_xprices` (`id_demande_article`, `prixwplace_demande_article`, `prix_demande_article`, `quantite_demande_article`, `remise_demande_article`, `date_demande_xprice`, `prix_accorde_demande_article`, `remise_accorde_demande_article`, `prix_fob_demande_article`, `prix_cif_demande_article`, `marge_demande_article`, `tracking_number_demande_xprice`, `code_article`, `reference_article`, `num_workplace_demande_xprice`) VALUES
+(1, 10.6200, 42.48, 20, 25, '2014-06-10', NULL, NULL, '11.00000', '11.00000', NULL, 'SP-FR-QAS00001', '00028125', 'TU0425R-100 ', '0090636993'),
+(2, 23.2900, 93.17, 20, 25, '2014-06-10', NULL, NULL, '24.06000', '24.06000', NULL, 'SP-FR-QAS00001', '00028169', 'TU0604BU-100', '0090636993'),
+(3, 41.8100, 167.26, 5, 25, '2014-06-10', NULL, NULL, '43.49000', '43.49000', NULL, 'SP-FR-QAS00001', '00028285', 'TU0805R-100', '0090636993');
 
 -- --------------------------------------------------------
 
@@ -81,28 +251,28 @@ CREATE TABLE IF NOT EXISTS `demande_article_xprices` (
 -- Structure de la table `demande_xprices`
 --
 
+DROP TABLE IF EXISTS `demande_xprices`;
 CREATE TABLE IF NOT EXISTS `demande_xprices` (
-  `id_demande_xprice` int(11) NOT NULL AUTO_INCREMENT COMMENT 'identifiant unique auto incrémenté de la demande',
-  `num_workplace_demande_xprice` varchar(35) NOT NULL COMMENT 'numéro de l''offre dans l''application externe workplace',
-  `tracking_number_demande_xprice` varchar(50) NOT NULL COMMENT 'numéro unique de l''offre dans l''application Xsuite',
-  `commentaire_demande_xprice` text COMMENT 'commentaire du commercial quand il crée l''offre dans xprice',
-  `date_demande_xprice` date NOT NULL COMMENT 'date de la demande effective dans l''application externe workplace',
-  `justificatif_demande_xprice` varchar(100) NOT NULL,
-  `id_user` int(11) NOT NULL COMMENT 'identifiant unique du user qui entre l''offre dans xprice',
-  `id_validation` int(11) DEFAULT NULL COMMENT 'identifiant unique validation ',
-  `id_client` int(11) NOT NULL COMMENT 'identifiant unique du client pour lequel est fait l''offre',
+  `id_demande_xprice` int(11) NOT NULL AUTO_INCREMENT,
+  `num_workplace_demande_xprice` varchar(35) NOT NULL,
+  `tracking_number_demande_xprice` varchar(50) NOT NULL,
+  `commentaire_demande_xprice` text,
+  `date_demande_xprice` date NOT NULL,
+  `justificatif_demande_xprice` varchar(80) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_validation` int(11) DEFAULT NULL,
+  `numwp_client` varchar(15) NOT NULL,
   PRIMARY KEY (`id_demande_xprice`),
   KEY `id_demande_article` (`id_user`,`id_validation`),
-  KEY `id_client` (`id_client`),
-  KEY `num_workplace_demande_xprice` (`num_workplace_demande_xprice`,`tracking_number_demande_xprice`,`id_validation`)
+  KEY `numwp_client` (`numwp_client`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- Contenu de la table `demande_xprices`
 --
 
-INSERT INTO `demande_xprices` (`id_demande_xprice`, `num_workplace_demande_xprice`, `tracking_number_demande_xprice`, `commentaire_demande_xprice`, `date_demande_xprice`, `justificatif_demande_xprice`, `id_user`, `id_validation`, `id_client`) VALUES
-(1, '0090636993', 'SP-FR-QAS00001', 'plop3', '2014-06-10', 'plop2', 11, NULL, 0);
+INSERT INTO `demande_xprices` (`id_demande_xprice`, `num_workplace_demande_xprice`, `tracking_number_demande_xprice`, `commentaire_demande_xprice`, `date_demande_xprice`, `justificatif_demande_xprice`, `id_user`, `id_validation`, `numwp_client`) VALUES
+(1, '0090636993', 'SP-FR-QAS00001', 'dydydyrdufrkiufikgfyuf', '2014-06-10', 'plop2', 11, NULL, 'I01277');
 
 -- --------------------------------------------------------
 
@@ -110,6 +280,7 @@ INSERT INTO `demande_xprices` (`id_demande_xprice`, `num_workplace_demande_xpric
 -- Structure de la table `fonctions`
 --
 
+DROP TABLE IF EXISTS `fonctions`;
 CREATE TABLE IF NOT EXISTS `fonctions` (
   `id_fonction` int(11) NOT NULL AUTO_INCREMENT,
   `nom_fonction` varchar(30) NOT NULL,
@@ -154,6 +325,7 @@ INSERT INTO `fonctions` (`id_fonction`, `nom_fonction`, `description_fonction`) 
 -- Structure de la table `holons`
 --
 
+DROP TABLE IF EXISTS `holons`;
 CREATE TABLE IF NOT EXISTS `holons` (
   `id_holon` int(11) NOT NULL AUTO_INCREMENT,
   `nom_holon` varchar(15) NOT NULL,
@@ -177,6 +349,7 @@ INSERT INTO `holons` (`id_holon`, `nom_holon`, `description_holon`) VALUES
 -- Structure de la table `industry`
 --
 
+DROP TABLE IF EXISTS `industry`;
 CREATE TABLE IF NOT EXISTS `industry` (
   `id_industry` int(11) NOT NULL AUTO_INCREMENT,
   `nom_industry` varchar(80) NOT NULL,
@@ -274,6 +447,7 @@ INSERT INTO `industry` (`id_industry`, `nom_industry`, `code_smc_industry`, `cod
 -- Structure de la table `users`
 --
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id_user` int(11) NOT NULL AUTO_INCREMENT,
   `nom_user` varchar(80) NOT NULL,
@@ -358,7 +532,7 @@ INSERT INTO `users` (`id_user`, `nom_user`, `prenom_user`, `tel_user`, `email_us
 (64, 'HATTERER', 'Nicolas', 6, 'nhatterer@smc-france.fr', 'smc00665', '', 4, 3, 3, 'niveau0'),
 (65, 'HAUPTMANN', 'Micka', 6, 'mhauptmann@smc-france.fr', 'smc00549', 'IS01', 2, 4, 3, 'niveau0'),
 (66, 'HIENNE', 'Eric', 6, 'ehienne@smc-france.fr', 'smc00279', 'Direction', 7, 0, 0, 'niveau0'),
-(67, 'HUBY', 'Magalie', 0, 'mhuby@smc-france.fr', 'smc00687', '', 0, 1, 1, 'niveau1'),
+(67, 'HUBY', 'Magalie', 0, 'mhuby@smc-france.fr', 'smc00687', '', 0, 1, 1, 'niveau2'),
 (68, 'JAMET', 'Pascal', 0, 'pjamet@smc-france.fr', 'mallauri', 'Support te', 18, 0, 0, 'niveau0'),
 (69, 'JOLY', 'Christophe', 0, 'cjoly@smc-france.fr', 'smc00119', 'Engineerin', 8, 0, 0, 'niveau0'),
 (70, 'JOURDAIN', 'Emmanuel', 6, 'ejourdain@smc-france.fr', 'thomas01', '', 0, 0, 0, 'niveau0'),
@@ -435,6 +609,7 @@ INSERT INTO `users` (`id_user`, `nom_user`, `prenom_user`, `tel_user`, `email_us
 -- Structure de la table `validations_xprice`
 --
 
+DROP TABLE IF EXISTS `validations_xprice`;
 CREATE TABLE IF NOT EXISTS `validations_xprice` (
   `id_validation` int(11) NOT NULL AUTO_INCREMENT,
   `date_validation` date NOT NULL,
@@ -451,6 +626,7 @@ CREATE TABLE IF NOT EXISTS `validations_xprice` (
 -- Structure de la table `zones`
 --
 
+DROP TABLE IF EXISTS `zones`;
 CREATE TABLE IF NOT EXISTS `zones` (
   `id_zone` int(11) NOT NULL AUTO_INCREMENT,
   `nom_zone` varchar(15) NOT NULL,
