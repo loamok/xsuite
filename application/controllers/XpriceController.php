@@ -3,14 +3,17 @@
 class XpriceController extends Zend_Controller_Action {
 
     //public $dsn3="DRIVER=Client Acess ODBC Driver(32-bit);UID=EU65535;PWD=CCS65535;SYSTEM=10.105.80.32;DBQ=CVXCDTA";
-    public $dsn = "DRIVER={MySQL};Server=127.0.0.1;Database=CVXCDTA;UID=EU65535;PWD=CCS65535;";
-    public $dsn2 = "DRIVER={MySQL};Server=127.0.0.1;Database=MVXCDTA;UID=root;PWD=geek;";
+    //public $dsn = "DRIVER={MySQL};Server=127.0.0.1;Database=CVXCDTA;UID=EU65535;PWD=CCS65535;";
+    public $dsn = "";
+    //public $dsn2 = "DRIVER={MySQL};Server=127.0.0.1;Database=MVXCDTA;UID=root;PWD=geek;";
+    public $dsn2 = "";
     public $odbc_conn = null;
     public $odbc_conn2 = null;
 
     //  public $odbc_conn3= null;
 
     public function init() {
+        $this->dsn = Zend_Registry::get("dsnString");
         $this->odbc_conn = odbc_connect($this->dsn, "", "");
         if (!$this->odbc_conn) {
             echo "pas d'accès à la base de données";
@@ -18,6 +21,7 @@ class XpriceController extends Zend_Controller_Action {
         $this->_auth = Zend_Auth::getInstance();
         $this->view->messages = $this->_helper->flashMessenger->getMessages();
 
+        $this->dsn2 = Zend_Registry::get("dsn2String");
         $this->odbc_conn2 = odbc_connect($this->dsn2, "", "");
         if (!$this->odbc_conn2) {
             echo "pas d'accès à la base de données MVXCDTA";
