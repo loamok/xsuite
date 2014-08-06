@@ -35,5 +35,21 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Registry::set("emailFrom", $email->sender);
     }
     
+    protected function _initMovexConnect() {
+        $movexConfig = new Zend_Config_Ini(APPLICATION_PATH.'/configs/movexConnect.ini');
+        $movexC = $movexConfig->get('movex');
+        $connexionConfig = $movexC->get('connection')->toArray();
+        foreach ($connexionConfig as $key => $value) {
+            Zend_Registry::set("{$key}", null);
+            $connexionString = "";
+            foreach ($value as $subKey => $subValue) {
+                $connexionString .= "{$subKey}={$subValue};";
+            }
+            Zend_Registry::set("{$key}String", $connexionString);
+            
+        }
+        
+    }
+    
 }
 
