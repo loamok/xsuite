@@ -286,8 +286,21 @@ class XpriceController extends Zend_Controller_Action {
         }
         
          if ($this->getRequest()->isPost()) {
-            $formData[] = $this->getRequest()->getPost();
-            echo "<pre>", var_export($formData),"</pre>";
+            $formData[]= $this->getRequest()->getPost();
+            //echo "<pre>", var_export($formData),"</pre>";
+            foreach($formData as $datas){
+                $fobs= array_combine($datas['code_article'],$datas['prix_fob']);
+                $cifs =array_combine($datas['code_article'],$datas['prix_cif']);
+                
+                    foreach($cifs as $key=>$value){
+                    $prixcifs= new Application_Model_DbTable_DemandeArticlexprices();
+                    $prixcif=$prixcifs->updatecif($value, $key, $datas['tracking_number']);
+                }
+                 foreach($fobs as $key=>$value){
+                    $prixfobs= new Application_Model_DbTable_DemandeArticlexprices();
+                    $prixfob=$prixcifs->updatefob($value, $key, $datas['tracking_number']);
+                }
+            }
          }
       }
 

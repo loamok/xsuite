@@ -22,6 +22,7 @@
           <dbTableFile dbTableName="Articlexprices"/>
           <dbTableFile dbTableName="Clients"/>
           <dbTableFile dbTableName="Article"/>
+          <dbTableFile dbTableName="Validationsxprice"/>
         </dbTableDirectory>
       </modelsDirectory>
       <modulesDirectory enabled="false"/>

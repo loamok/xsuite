@@ -45,6 +45,25 @@ class Application_Model_DbTable_DemandeArticlexprices extends Zend_Db_Table_Abst
         $plop2 = $this->update($datas, $where);
         return $plop2;
     }
-
+public function updatecif($cifs,$code_article,$tracking_number){
+    $code_article="$code_article";
+    $tracking_number="$tracking_number";
+    $plop=$this->getAdapter();
+    $datas = array('prix_cif_demande_article'=>$cifs);
+    $where = $plop->quoteInto('code_article = ?', $code_article)
+                . $plop->quoteInto(' And tracking_number_demande_xprice = ?', $tracking_number);
+        $plop2 = $this->update($datas, $where);
+        return $plop2;
+}
+public function updatefob($fobs,$code_article,$tracking_number){
+    $code_article="$code_article";
+    $tracking_number="$tracking_number";
+    $plop=$this->getAdapter();
+    $datas = array('prix_fob_demande_article'=>$fobs);
+    $where = $plop->quoteInto('code_article = ?', $code_article)
+                . $plop->quoteInto(' And tracking_number_demande_xprice = ?', $tracking_number);
+        $plop2 = $this->update($datas, $where);
+        return $plop2;
+}
 }
 
