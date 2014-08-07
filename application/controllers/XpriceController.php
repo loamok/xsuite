@@ -284,6 +284,11 @@ class XpriceController extends Zend_Controller_Action {
                 $this->view->info_prixfobfr = $info_prixfobfr;
             }     
         }
+        
+         if ($this->getRequest()->isPost()) {
+            $formData[] = $this->getRequest()->getPost();
+            echo "<pre>", var_export($formData),"</pre>";
+         }
       }
 
     public function deleteAction() {
