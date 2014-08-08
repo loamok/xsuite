@@ -257,10 +257,10 @@ class XpriceController extends Zend_Controller_Action {
         $infos_demande_xprice = new Application_Model_DbTable_Xprices();
         $info_demande_xprice = $infos_demande_xprice->getNumwp($numwp);
         echo '<pre>', var_export($info_demande_xprice), '</pre>';
-        // var_dump( $info_demande_xprice['id_user']);
+         var_dump( $info_demande_xprice['id_user']);
         $this->view->info_demande_xprice = $info_demande_xprice;
         $infos_user = new Application_Model_DbTable_Users();
-        $info_user = $infos_user->getUserDemande($info_demande_xprice['id_user']);
+        $info_user = $infos_user->getUserDemande($info_demande_xprice->id_user);
         // echo '<pre>',var_export($info_user),'</pre>';
         $this->view->info_user = $info_user;
         $infos_client = new Application_Model_DbTable_Clients();
