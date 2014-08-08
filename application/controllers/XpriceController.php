@@ -246,7 +246,7 @@ class XpriceController extends Zend_Controller_Action {
 
     public function prixfobfrAction() {
         $user = $this->_auth->getStorage()->read();
-        var_dump($user);
+       // var_dump($user);
         
         $numwp = $this->getRequest()->getParam('numwp', null);
         //var_dump($numwp);
@@ -257,10 +257,10 @@ class XpriceController extends Zend_Controller_Action {
         $infos_demande_xprice = new Application_Model_DbTable_Xprices();
         $info_demande_xprice = $infos_demande_xprice->getNumwp($numwp);
         echo '<pre>', var_export($info_demande_xprice), '</pre>';
-         var_dump( $info_demande_xprice['id_user']);
+        // var_dump( $info_demande_xprice['id_user']);
         $this->view->info_demande_xprice = $info_demande_xprice;
         $infos_user = new Application_Model_DbTable_Users();
-        $info_user = $infos_user->getUserDemande($user->id_user);
+        $info_user = $infos_user->getUserDemande($info_demande_xprice['id_user']);
         // echo '<pre>',var_export($info_user),'</pre>';
         $this->view->info_user = $info_user;
         $infos_client = new Application_Model_DbTable_Clients();
@@ -308,39 +308,7 @@ class XpriceController extends Zend_Controller_Action {
                 $validations=new Application_Model_DbTable_Validationsxprice();
                 $validation= $validations->createValidation($date_validation,$etat,$datas['commentaire_fobfr'],$user->id_user,$datas['tracking_number']);
             }
-          /*
-                 * ici, envoi des mails
-                 */
-                $emailVars = Zend_Registry::get('emailVars');
-                $supplychainMail ="epilogue59loamok.org";
-                $url = "http://{$_SERVER['SERVER_NAME']}/xprice/supplychain/numwp/{$numwp}";
-                $corpsMail = "Bonjour,\n"
-                        . "\n"
-                        . "Vous avez une nouvelle demande XPrice à valider.\n"
-                        . "Veuillez vous rendre à l'adresse url : \n"
-                        . "%s"
-                        . "\n\n"
-                        . "Cordialement,\n"
-                        . "\n"
-                        . "--\n"
-                        . "Le service info.";
-                $mail = new Xsuite_Mail();
-                $mail->setSubject("XPrice : Nouvelle demande à valider.")
-                        ->setBodyText(sprintf($corpsMail, $url))
-                        ->addTo($supplychainMail)
-                        ->send();
-                /*
-                 * Fin du traitement
-                 */
-                $flashMessenger = $this->_helper->getHelper('FlashMessenger');
-                $message = "Votre validation  a bien été enregistrée.";
-                $flashMessenger->addMessage($message);
-                $redirector = $this->_helper->getHelper('Redirector');
-                $redirector->gotoSimple('index', 'xprice');
-            } else {
-               $redirector = $this->_helper->getHelper('Redirector');
-                $redirector->gotoSimple('prixfobfr', 'xprice');
-            }
+         }
       }
 
     public function deleteAction() {
