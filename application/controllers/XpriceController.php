@@ -291,6 +291,7 @@ class XpriceController extends Zend_Controller_Action {
          if ($this->getRequest()->isPost()) {
              $date_validation = date("d-m-Y");
              $etat="validé";
+             $nom_validation="fobfr";
             $formData[]= $this->getRequest()->getPost();
             //echo "<pre>", var_export($formData),"</pre>";
             foreach($formData as $datas){
@@ -306,10 +307,10 @@ class XpriceController extends Zend_Controller_Action {
                     $prixfob=$prixcifs->updatefob($value, $key, $datas['tracking_number']);
                 }
                 $validations=new Application_Model_DbTable_Validationsxprice();
-                $validation= $validations->createValidation($date_validation,$etat,$datas['commentaire_fobfr'],$user->id_user,$datas['tracking_number']);
+                $validation= $validations->createValidation($nom_validation,$date_validation,$etat,$datas['commentaire_fobfr'],$user->id_user,$datas['tracking_number']);
             }$emailVars = Zend_Registry::get('emailVars');
                 $fobfrMail = $emailVars->listes->fobfr;
-                $url = "http://{$_SERVER['SERVER_NAME']}/xprice/validateSMC/numwp/{$numwp}";
+                $url = "http://{$_SERVER['SERVER_NAME']}/xprice/validatesupply/numwp/{$numwp}";
                 $corpsMail = "Bonjour,\n"
                         . "\n"
                         . "Vous avez une nouvelle demande XPrice à valider.\n"
@@ -335,13 +336,50 @@ class XpriceController extends Zend_Controller_Action {
         // action body
     }
 
-    public function validateSMCAction() {
+    public function validatesupplyAction() {
         $user = $this->_auth->getStorage()->read();
        // var_dump($user);
         
         $numwp = $this->getRequest()->getParam('numwp', null);
         //var_dump($numwp);
         $this->view->numwp = $numwp;
+        /*
+         * on va rechercher les informations concernant la demande _xprice
+         */
+        $infos_demande_xprice = new Application_Model_DbTable_Xprices();
+        $info_demande_xprice = $infos_demande_xprice->getNumwp($numwp);
+        echo '<pre>', var_export($info_demande_xprice), '</pre>';
+        // var_dump( $info_demande_xprice['id_user']);
+        $this->view->info_demande_xprice = $info_demande_xprice;
+        $infos_user = new Application_Model_DbTable_Users();
+        $info_user = $infos_user->getUserDemande($info_demande_xprice['id_user']);
+        // echo '<pre>',var_export($info_user),'</pre>';
+        $this->view->info_user = $info_user;
+        $infos_client = new Application_Model_DbTable_Clients();
+        $info_client = $infos_client->getClientnumwp($info_demande_xprice['numwp_client']);
+        //echo '<pre>',var_export($info_client),'</pre>';
+        $this->view->info_client = $info_client;
+        $infos_validation = new Application_Model_DbTable_Validationsxprice();
+        $infos_demande_article_xprice = new Application_Model_DbTable_DemandeArticlexprices();
+        $info_demande_article_xprice = $infos_demande_article_xprice->getDemandeArticlexprice($numwp);
+        //echo '<pre>',  var_export($info_demande_article_xprice,true),'</pre>';
+        $this->view->info_demande_article_xprice = $info_demande_article_xprice;
+        foreach ($info_demande_article_xprice as $value) {
+
+
+            $query = "select *"
+                    . "from "
+                    . "MCHEAD "
+                    . "WHERE MCHEAD.KOITNO = '{$value['code_article']}' order by KOPCDT desc limit 1";
+            $infos_prixfobfr = odbc_exec($this->odbc_conn2, $query);
+            while ($info_prixfobfr = odbc_fetch_array($infos_prixfobfr)) {
+                $date1 = substr($info_prixfobfr['KOPCDT'], 0, -4);
+                $date2 = substr($info_prixfobfr['KOPCDT'], 4, -2);
+                $date3 = substr($info_prixfobfr['KOPCDT'], 6, 2);
+                $date = implode('-', array($date1, $date2, $date3));
+                $this->view->info_prixfobfr = $info_prixfobfr;
+            }     
+        }
     }
 
     public function updateAction() {
