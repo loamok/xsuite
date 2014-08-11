@@ -336,7 +336,12 @@ class XpriceController extends Zend_Controller_Action {
     }
 
     public function validateSMCAction() {
-        // action body
+        $user = $this->_auth->getStorage()->read();
+       // var_dump($user);
+        
+        $numwp = $this->getRequest()->getParam('numwp', null);
+        //var_dump($numwp);
+        $this->view->numwp = $numwp;
     }
 
     public function updateAction() {
