@@ -309,6 +309,24 @@ class XpriceController extends Zend_Controller_Action {
                 $validation= $validations->createValidation($date_validation,$etat,$datas['commentaire_fobfr'],$user->id_user,$datas['tracking_number']);
             }
          }
+          $emailVars = Zend_Registry::get('emailVars');
+                $fobfrMail = $emailVars->listes->fobfr;
+                $url = "http://{$_SERVER['SERVER_NAME']}/xprice/prixfobfr/numwp/{$numwp}";
+                $corpsMail = "Bonjour,\n"
+                        . "\n"
+                        . "Vous avez une nouvelle demande XPrice à valider.\n"
+                        . "Veuillez vous rendre à l'adresse url : \n"
+                        . "%s"
+                        . "\n\n"
+                        . "Cordialement,\n"
+                        . "\n"
+                        . "--\n"
+                        . "Le service info.";
+                $mail = new Xsuite_Mail();
+                $mail->setSubject("XPrice : Nouvelle demande à valider.")
+                        ->setBodyText(sprintf($corpsMail, $url))
+                        ->addTo($fobfrMail)
+                        ->send();
       }
 
     public function deleteAction() {
