@@ -23,8 +23,8 @@ public function getValidation($nom_validation,$tracking_number) {
        
         $where = $plop->quoteInto('nom_validation = ?',$nom_validation)
                 . $plop->quoteInto('And tracking_number_demande_xprice = ?', $tracking_number);
-        $plop2 = $this->fetchAll($where);
-        return $plop2;
+       $plop2= $this->fetchAll($where);
+        return $plop2->toArray();
 }
 }
 

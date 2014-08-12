@@ -80,12 +80,12 @@ $this->headTitle($this->title);
 <fielset id='info_fobfr'><legend>informations  FOBFR</legend>
         <table>
             <tr>
-                <td><?php echo $this->info_validation['date_validation'] ; ?></td>
-                <td><?php echo $this->info_validation['commentaire_validation']?></td>
+                <td><?php echo $this->info_validation[0]['date_validation']; ; ?></td>
+                <td><?php echo $this->info_validation[0]['commentaire_validation']?></td>
                 </tr>
         </table>
     </fielset>
-<form action="#" method="post">
+<form action="" method="post">
 <div id="demandeArticle">
     <fieldset ><legend>Articles </legend>
         <table id="article">
@@ -117,8 +117,8 @@ $this->headTitle($this->title);
     </fieldset>  
 </div>
 <div id='formprixfob'>
-    <fieldset id='form_prixfob'><legend>Commentaire Fobfr</legend>
-        <textarea name="commentaire_fobfr" cols="100" rows="20"></textarea>
+    <fieldset id='form_prixfob'><legend>Commentaire Supply chain Manager</legend>
+        <textarea name="commentaire_supply" cols="50" rows="20"></textarea>
     </fieldset>
 </div>
     <input type="submit" value="enregistrer">
