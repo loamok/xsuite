@@ -246,8 +246,8 @@ class XpriceController extends Zend_Controller_Action {
 
     public function prixfobfrAction() {
         $user = $this->_auth->getStorage()->read();
-       // var_dump($user);
-        
+        // var_dump($user);
+
         $numwp = $this->getRequest()->getParam('numwp', null);
         //var_dump($numwp);
         $this->view->numwp = $numwp;
@@ -256,12 +256,14 @@ class XpriceController extends Zend_Controller_Action {
          */
         $infos_demande_xprice = new Application_Model_DbTable_Xprices();
         $info_demande_xprice = $infos_demande_xprice->getNumwp($numwp);
-        echo '<pre>', var_export($info_demande_xprice), '</pre>';
-        // var_dump( $info_demande_xprice['id_user']);
+//        echo '<pre>', var_export($info_demande_xprice), '</pre>';
+        $user_id = $info_demande_xprice['id_user'];
+//        var_dump($user_id);
+//        exit();
         $this->view->info_demande_xprice = $info_demande_xprice;
         $infos_user = new Application_Model_DbTable_Users();
         $info_user = $infos_user->getUserDemande($info_demande_xprice['id_user']);
-        // echo '<pre>',var_export($info_user),'</pre>';
+        //echo '<pre>', var_export($info_user), '</pre>';
         $this->view->info_user = $info_user;
         $infos_client = new Application_Model_DbTable_Clients();
         $info_client = $infos_client->getClientnumwp($info_demande_xprice['numwp_client']);
@@ -285,57 +287,58 @@ class XpriceController extends Zend_Controller_Action {
                 $date3 = substr($info_prixfobfr['KOPCDT'], 6, 2);
                 $date = implode('-', array($date1, $date2, $date3));
                 $this->view->info_prixfobfr = $info_prixfobfr;
-            }     
+            }
         }
-        
-         if ($this->getRequest()->isPost()) {
-             $date_validationfobfr = date("d-m-Y");
-             $etat="validé";
-             $nom_validationfobfr="fobfr";
-            $formData[]= $this->getRequest()->getPost();
+
+        if ($this->getRequest()->isPost()) {
+            $date_validationfobfr = date("d-m-Y");
+            $etat = "validé";
+            $nom_validationfobfr = "fobfr";
+            $formData[] = $this->getRequest()->getPost();
             //echo "<pre>", var_export($formData),"</pre>";
-            foreach($formData as $datas){
-                $fobs= array_combine($datas['code_article'],$datas['prix_fob']);
-                $cifs =array_combine($datas['code_article'],$datas['prix_cif']);
-                
-                    foreach($cifs as $key=>$value){
-                    $prixcifs= new Application_Model_DbTable_DemandeArticlexprices();
-                    $prixcif=$prixcifs->updatecif($value, $key, $datas['tracking_number']);
+            foreach ($formData as $datas) {
+                $fobs = array_combine($datas['code_article'], $datas['prix_fob']);
+                $cifs = array_combine($datas['code_article'], $datas['prix_cif']);
+
+                foreach ($cifs as $key => $value) {
+                    $prixcifs = new Application_Model_DbTable_DemandeArticlexprices();
+                    $prixcif = $prixcifs->updatecif($value, $key, $datas['tracking_number']);
                 }
-                 foreach($fobs as $key=>$value){
-                    $prixfobs= new Application_Model_DbTable_DemandeArticlexprices();
-                    $prixfob=$prixcifs->updatefob($value, $key, $datas['tracking_number']);
+                foreach ($fobs as $key => $value) {
+                    $prixfobs = new Application_Model_DbTable_DemandeArticlexprices();
+                    $prixfob = $prixcifs->updatefob($value, $key, $datas['tracking_number']);
                 }
-                $validations=new Application_Model_DbTable_Validationsxprice();
-                $validation= $validations->createValidation($nom_validationfobfr,$date_validationfobfr,$etat,$datas['commentaire_fobfr'],$user->id_user,$datas['tracking_number']);
-            }$emailVars = Zend_Registry::get('emailVars');
-                $fobfrMail = $emailVars->listes->fobfr;
-                $url = "http://{$_SERVER['SERVER_NAME']}/xprice/validatesupply/numwp/{$numwp}";
-                $corpsMail = "Bonjour,\n"
-                        . "\n"
-                        . "Vous avez une nouvelle demande XPrice à valider.\n"
-                        . "Veuillez vous rendre à l'adresse url : \n"
-                        . "%s"
-                        . "\n\n"
-                        . "Cordialement,\n"
-                        . "\n"
-                        . "--\n"
-                        . "Le service info.";
-                $mail = new Xsuite_Mail();
-                $mail->setSubject("XPrice : Nouvelle demande à valider.")
-                        ->setBodyText(sprintf($corpsMail, $url))
-                        ->addTo($fobfrMail)
-                        ->send();
-                $flashMessenger = $this->_helper->getHelper('FlashMessenger');
-                $message = "les prix fob et cif  ont bien été enregistrés.";
-                $flashMessenger->addMessage($message);
-                $redirector = $this->_helper->getHelper('Redirector');
-                $redirector->gotoSimple('index', 'xprice');
-         }else 
-      {
-          
-      } 
-      } 
+                $validations = new Application_Model_DbTable_Validationsxprice();
+                $validation = $validations->createValidation($nom_validationfobfr, $date_validationfobfr, $etat, $datas['commentaire_fobfr'], $user->id_user, $datas['tracking_number']);
+            }
+            //changer l'adresse mail et faire en sorte que ce  soit le supply chain qui recoive le mail
+            $emailVars = Zend_Registry::get('emailVars');
+            $fobfrMail = $emailVars->listes->fobfr;
+            $url = "http://{$_SERVER['SERVER_NAME']}/xprice/validatesupply/numwp/{$numwp}";
+            $corpsMail = "Bonjour,\n"
+                    . "\n"
+                    . "Vous avez une nouvelle demande XPrice à valider.\n"
+                    . "Veuillez vous rendre à l'adresse url : \n"
+                    . "%s"
+                    . "\n\n"
+                    . "Cordialement,\n"
+                    . "\n"
+                    . "--\n"
+                    . "Prix fobfr.";
+            $mail = new Xsuite_Mail();
+            $mail->setSubject("XPrice : Nouvelle demande à valider.")
+                    ->setBodyText(sprintf($corpsMail, $url))
+                    ->addTo($fobfrMail)
+                    ->send();
+            $flashMessenger = $this->_helper->getHelper('FlashMessenger');
+            $message = "les prix fob et cif  ont bien été enregistrés.";
+            $flashMessenger->addMessage($message);
+            $redirector = $this->_helper->getHelper('Redirector');
+            $redirector->gotoSimple('index', 'xprice');
+        } else {
+
+        }
+    }
 
     public function deleteAction() {
         // action body
@@ -343,8 +346,8 @@ class XpriceController extends Zend_Controller_Action {
 
     public function validatesupplyAction() {
         $user = $this->_auth->getStorage()->read();
-       // var_dump($user);
-        $nom_validation="fobfr";
+        // var_dump($user);
+        $nom_validation = "fobfr";
         $numwp = $this->getRequest()->getParam('numwp', null);
         //var_dump($numwp);
         $this->view->numwp = $numwp;
@@ -365,8 +368,8 @@ class XpriceController extends Zend_Controller_Action {
         //echo '<pre>',var_export($info_client),'</pre>';
         $this->view->info_client = $info_client;
         $infos_validation = new Application_Model_DbTable_Validationsxprice();
-        $info_validation= $infos_validation->getValidation($nom_validation, $info_demande_xprice['tracking_number_demande_xprice']);
-        $this->view->info_validation=$info_validation;
+        $info_validation = $infos_validation->getValidation($nom_validation, $info_demande_xprice['tracking_number_demande_xprice']);
+        $this->view->info_validation = $info_validation;
         //echo '<pre>',var_export($info_validation,true),'</pre>';
         $infos_demande_article_xprice = new Application_Model_DbTable_DemandeArticlexprices();
         $info_demande_article_xprice = $infos_demande_article_xprice->getDemandeArticlexprice($numwp);
@@ -386,33 +389,33 @@ class XpriceController extends Zend_Controller_Action {
                 $date3 = substr($info_prixfobfr['KOPCDT'], 6, 2);
                 $date = implode('-', array($date1, $date2, $date3));
                 $this->view->info_prixfobfr = $info_prixfobfr;
-            }     
+            }
         }
         if ($this->getRequest()->isPost()) {
-             $date_validationsupply = date("d-m-Y");
-             $etat="validé";
-             $nom_validationsupply="supply";
-        $formData[]= $this->getRequest()->getPost();
-        foreach($formData as $datas){
-                $fobs= array_combine($datas['code_article'],$datas['prix_fob']);
-                $cifs =array_combine($datas['code_article'],$datas['prix_cif']);
-                
-                    foreach($cifs as $key=>$value){
-                    $prixcifs= new Application_Model_DbTable_DemandeArticlexprices();
-                    $prixcif=$prixcifs->updatecif($value, $key, $datas['tracking_number']);
+            $date_validationsupply = date("d-m-Y");
+            $etat = "validé";
+            $nom_validationsupply = "supply";
+            $formData[] = $this->getRequest()->getPost();
+            foreach ($formData as $datas) {
+                $fobs = array_combine($datas['code_article'], $datas['prix_fob']);
+                $cifs = array_combine($datas['code_article'], $datas['prix_cif']);
+
+                foreach ($cifs as $key => $value) {
+                    $prixcifs = new Application_Model_DbTable_DemandeArticlexprices();
+                    $prixcif = $prixcifs->updatecif($value, $key, $datas['tracking_number']);
                 }
-                 foreach($fobs as $key=>$value){
-                    $prixfobs= new Application_Model_DbTable_DemandeArticlexprices();
-                    $prixfob=$prixcifs->updatefob($value, $key, $datas['tracking_number']);
+                foreach ($fobs as $key => $value) {
+                    $prixfobs = new Application_Model_DbTable_DemandeArticlexprices();
+                    $prixfob = $prixcifs->updatefob($value, $key, $datas['tracking_number']);
                 }
-                $validations=new Application_Model_DbTable_Validationsxprice();
-                $validation= $validations->createValidation($nom_validationsupply,$date_validationsupply,$etat,$datas['commentaire_fobfr'],$user->id_user,$datas['tracking_number']);
+                $validations = new Application_Model_DbTable_Validationsxprice();
+                $validation = $validations->createValidation($nom_validationsupply, $date_validationsupply, $etat, $datas['commentaire_fobfr'], $user->id_user, $datas['tracking_number']);
             }
         }
     }
 
     public function updateAction() {
-        
+
     }
 
     public function listAction() {
