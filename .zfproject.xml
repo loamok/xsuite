@@ -14,6 +14,7 @@
       </controllersDirectory>
       <formsDirectory enabled="false">
         <formFile formName="Confirmcreate"/>
+        <formFile formName="Recherchexprice"/>
       </formsDirectory>
       <layoutsDirectory enabled="false"/>
       <modelsDirectory>

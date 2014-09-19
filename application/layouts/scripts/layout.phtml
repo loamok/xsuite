@@ -15,8 +15,12 @@ echo $this->doctype();
     </head>
     <body>
         <div id="header">
-            <div id="header_left"></div>
-            <div id="header_center"></div>
+            <div id="header_left"><img  src="/images/smc_logo_2013.jpg" alt="" usemap="#Map2"/>
+                <map name="Map2" id="Map2">
+                    <area alt="accueil" title="accueil" href="<?php echo $this->url(array('controller' => 'index', 'action' => 'index'), null, true); ?>" shape="rect" coords="11,10,223,50" />
+                </map>
+            </div>
+            <div id="header_center"> <H1>Xsuite</H1></div>
             <div id="header_right">
                 <div id="header_site">
                     <a href="">retour au site intranet</a>
@@ -30,9 +34,7 @@ echo $this->doctype();
                     <li><a href="<?php echo $this->url(array('controller' => 'xprice', 'action' => 'index'), null, true); ?>">Xprice</a>
                         <ul>
                             <li><a href="<?php echo $this->url(array('controller' => 'xprice', 'action' => 'numwp'), null, true); ?>">Cr&eacute;ation</a></li>
-                            <li><a href="<?php echo $this->url(array('controller' => 'xprice', 'action' => 'validate'), null, true); ?>">Validation</a></li>
                             <li><a href="<?php echo $this->url(array('controller' => 'xprice', 'action' => 'update'), null, true); ?>">Modification</a></li>
-                            <li><a href="<?php echo $this->url(array('controller' => 'xprice', 'action' => 'delete'), null, true); ?>">Suppression</a></li>
                             <li><a href="<?php echo $this->url(array('controller' => 'xprice', 'action' => 'list'), null, true); ?>">Consultation</a></li>
                         </ul>
                     </li>
@@ -72,7 +74,6 @@ echo $this->doctype();
                  *  - utiliser une url absolue pour ce logo (src="/images/...)
                  *  - placer l'image en background css
                  */ ?>
-                <img width="250px" height="60px" border="0" src="/images/logo_smc_bleu.jpg"></img>
             </div>
         </div>
 

@@ -34,6 +34,23 @@ class XpriceController extends Zend_Controller_Action {
 
     public function indexAction() {
         // action body
+        $tracking = $this->getRequest()->getParam('tracking_number', null);
+        $form = new Application_Form_Recherchexprice();
+        if (!is_null($tracking)) {
+            $form->populate(array("tracking_number" => $tracking));
+        }
+
+        // var_dump($tracking_number);
+
+        if ($this->getRequest()->isPost()) {
+            $redirector = $this->_helper->getHelper('Redirector');
+
+            if ($form->isValid($this->getRequest()->getPost())) {
+                $tracking_number = 'SP-FR-' . $tracking;
+                var_dump($tracking_number);
+            }
+        }
+        $this->view->form = $form;
     }
 
     public function numwpAction() {
@@ -419,6 +436,7 @@ class XpriceController extends Zend_Controller_Action {
     }
 
     public function listAction() {
+
         // action body
     }
 
