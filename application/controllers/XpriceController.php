@@ -47,7 +47,17 @@ class XpriceController extends Zend_Controller_Action {
 
             if ($form->isValid($this->getRequest()->getPost())) {
                 $tracking_number = 'SP-FR-' . $tracking;
-                var_dump($tracking_number);
+                //var_dump($tracking_number);
+                $getstracking = new Application_Model_DbTable_Xprices;
+                $gettracking = $getstracking->getTracking($tracking_number);
+                if (!is_null($gettracking)) {
+                    $redirector->gotoSimple('list', 'xprice', null, array('tracking_number' => $_POST['tracking_number']));
+                } else {
+                    $flashMessenger = $this->_helper->getHelper('FlashMessenger');
+                    $message = "ce tracking number  n'a pas de concordance dans la base Xsuite";
+                    $flashMessenger->addMessage($message);
+                    $redirector->gotoSimple('index', 'xprice', null, array('tracking_number' => $_POST['tracking_number']));
+                }
             }
         }
         $this->view->form = $form;
@@ -436,8 +446,12 @@ class XpriceController extends Zend_Controller_Action {
     }
 
     public function listAction() {
-
-        // action body
+        $tracking = $this->getRequest()->getParam('tracking_number', null);
+        $tracking_number = 'SP-FR-' . $tracking;
+        $this->view->tracking_number = $tracking_number;
+        $infos = new Application_Model_DbTable_DemandeArticlexprices();
+        $info = $infos->listtracking($tracking_number);
+        echo '<pre>', var_export($info, true), '</pre>';
     }
 
 }

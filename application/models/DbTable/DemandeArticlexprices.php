@@ -45,25 +45,62 @@ class Application_Model_DbTable_DemandeArticlexprices extends Zend_Db_Table_Abst
         $plop2 = $this->update($datas, $where);
         return $plop2;
     }
-public function updatecif($cifs,$code_article,$tracking_number){
-    $code_article="$code_article";
-    $tracking_number="$tracking_number";
-    $plop=$this->getAdapter();
-    $datas = array('prix_cif_demande_article'=>$cifs);
-    $where = $plop->quoteInto('code_article = ?', $code_article)
+
+    public function updatecif($cifs, $code_article, $tracking_number) {
+        $code_article = "$code_article";
+        $tracking_number = "$tracking_number";
+        $plop = $this->getAdapter();
+        $datas = array('prix_cif_demande_article' => $cifs);
+        $where = $plop->quoteInto('code_article = ?', $code_article)
                 . $plop->quoteInto(' And tracking_number_demande_xprice = ?', $tracking_number);
         $plop2 = $this->update($datas, $where);
         return $plop2;
-}
-public function updatefob($fobs,$code_article,$tracking_number){
-    $code_article="$code_article";
-    $tracking_number="$tracking_number";
-    $plop=$this->getAdapter();
-    $datas = array('prix_fob_demande_article'=>$fobs);
-    $where = $plop->quoteInto('code_article = ?', $code_article)
+    }
+
+    public function updatefob($fobs, $code_article, $tracking_number) {
+        $code_article = "$code_article";
+        $tracking_number = "$tracking_number";
+        $plop = $this->getAdapter();
+        $datas = array('prix_fob_demande_article' => $fobs);
+        $where = $plop->quoteInto('code_article = ?', $code_article)
                 . $plop->quoteInto(' And tracking_number_demande_xprice = ?', $tracking_number);
         $plop2 = $this->update($datas, $where);
         return $plop2;
-}
+    }
+
+    public function listtracking($tracking_number) {
+        $db = $this->getAdapter();
+        $select = $db->select()
+                ->from(array("demande_xprices"), array("demande_xprices.tracking_number_demande_xprice",
+                    "commentaire_demande_xprice",
+                    "demande_xprices.date_demande_xprice",
+                    "demande_xprices.numwp_client",
+                    "demande_article_xprices.code_article",
+                    "demande_article_xprices.reference_article",
+                    "demande_article_xprices.prixwplace_demande_article",
+                    "demande_article_xprices.prix_demande_article",
+                    "demande_article_xprices.quantite_demande_article",
+                    "demande_article_xprices.remise_demande_article",
+                    "validations_xprice.nom_validation",
+                    "validations_xprice.etat_validation",
+                    "validations_xprice.date_validation"))
+                ->join(array("demande_article_xprices"), "demande_xprices.tracking_number_demande_xprice=demande_article_xprices.tracking_number_demande_xprice")
+                ->join(array("clients"), " clients.numwp_client=demande_xprices.numwp_client")
+                ->join(array("validations_xprice"), "demande_xprices.tracking_number_demande_xprice=validations_xprice.tracking_number_demande_xprice")
+                ->where("demande_xprices.tracking_number_demande_xprice='{$tracking_number}'");
+//        var_dump($select->__toString());
+//        exit();
+
+        $plop = $select->query();
+        $result = $plop->fetchAll();
+        var_dump($result);
+        exit();
+        if (!$result) {
+            return null;
+        } else {
+            return $result;
+        }
+    }
+
 }
 

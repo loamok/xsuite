@@ -12,8 +12,8 @@ class Application_Form_Recherchexprice extends Zend_Form {
                 ->setRequired(TRUE)
                 ->addFilter('StripTags')
                 ->addFilter('StringTrim')
-                ->addValidator('regex', false, array('/^[a-zA-Z]|[a-zA-Z]|\d$/', 'messages' => array(Zend_Validate_Regex::NOT_MATCH => "numéro invalide")))
-                ->addValidator('NotEmpty', true, array('messages' => array(Zend_Validate_NotEmpty::IS_EMPTY => "lechamp tracking number ne peut pas être vide.")));
+                ->addValidator('regex', false, array('/[a-zA-Z]{2}+[a-zA-Z0-9]+[0-9]/', 'messages' => array(Zend_Validate_Regex::NOT_MATCH => "numéro invalide")))
+                ->addValidator('NotEmpty', true, array('messages' => array(Zend_Validate_NotEmpty::IS_EMPTY => "le champ tracking number ne peut pas être vide.")));
 
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setAttrib('tracking_number', 'submitbutton')

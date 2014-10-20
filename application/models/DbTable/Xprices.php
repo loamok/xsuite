@@ -71,11 +71,20 @@ class Application_Model_DbTable_Xprices extends Zend_Db_Table_Abstract {
             return $row->toArray();
         }
     }
-    public function fetchAll($numwp){
-        
+
+    public function fetchAll($numwp) {
+
     }
-            
-    
+
+    public function getTracking($tracking_number) {
+        $tracking_number = "$tracking_number";
+        $row = $this->fetchRow("tracking_number_demande_xprice = '{$tracking_number}'");
+        if (!$row) {
+            return null;
+        } else {
+            return $row->toArray();
+        }
+    }
 
 }
 
